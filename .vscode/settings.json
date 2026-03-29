@@ -1,0 +1,8 @@
+{
+	"Lua.workspace.library": [
+		"${addons}/lovr/module/library",
+		"${addons}/love-nuklear/module/library"
+	],
+	"Lua.runtime.version": "LuaJIT",
+	"Lua.workspace.checkThirdParty": false
+}
