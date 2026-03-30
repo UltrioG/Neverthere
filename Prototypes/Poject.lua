@@ -6,13 +6,19 @@
 ---
 ---@class Poject
 ---@field Prototype Poject
-local Poject = {}
+---@field Type string
+local Poject = {
+	Type = "Poject"
+}
 
 ---Returns a new object identical to the first.
 ---@return Poject Clone
 function Poject:Clone()
 	---@type Poject
-	local new = {Prototype = self}
+	local new = {
+		Prototype = self,
+		Type = self.Type
+	}
 	setmetatable(new, {
 		__index = function (T, k)
 			if rawget(T, k) ~= nil then return rawget(T, k) end
