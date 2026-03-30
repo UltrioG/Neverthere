@@ -3,9 +3,7 @@ local BASIC = require "basic"
 local TextLabel = require "Library.TextLabel"
 
 function lovr.load()
-	camera = {
-		transform = Mat4(Vec3(0,1,0))
-	}
+	
 end
 
 local t = 0
@@ -29,13 +27,14 @@ local function render2D(pass)
 	pass:setDepthTest()
 
 	pass:setColor(0xFF8000)
-	TL.Position.xScale = (math.cos(t)+1)/2*(0.5)+0.25
-	TL.Position.yScale = (math.sin(t)+1)/2*(0.5)+0.25
+	TL.Position.xScale = math.lerp(0.25, 0.75, (math.cos(t)+1)/2)
+	TL.Position.yScale = math.lerp(0.25, 0.75, (math.sin(t)+1)/2)
+	TL.TextScale = math.lerp(0.8, 2, (math.cos(t)+1)/2)
+	TL.Rotation = math.lerp(0, math.pi/6, math.sin(t^2))
 	TL:Render(pass)
 end
 
 function lovr.draw(pass)
-	pass:setViewPose(1, camera.transform, false)
 	BASIC.plane(pass)
 
 	render2D(pass)

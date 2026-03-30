@@ -4,9 +4,12 @@ local POJ = require("Library.Poject")
 ---@field Position UDim2
 ---@field Size UDim2
 ---@field Parent GUI2D
+---@field Rotation number The radians counterclockwise the GUI2D spins
 local GUI2D = POJ:Clone()
 GUI2D.Type = "GUI2D"
 GUI2D.Parent = GUI2D
+GUI2D.Position = {xScale = 0.5, yScale = 0.5}
+GUI2D.Rotation = 0
 
 ---Gets the pixel size of the GUI2D.
 ---@return integer
