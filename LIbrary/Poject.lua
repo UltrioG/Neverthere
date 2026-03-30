@@ -31,4 +31,22 @@ function Poject:Clone()
 	return new
 end
 
+---Check if this Poject inherits from a type
+---@param potype string
+---@return boolean
+---@overload fun(potype: Poject): boolean
+function Poject:IsA(potype)
+	---@type string?
+	local typeToCheck =
+		type(potype) == "table"
+		and (type(potype.Type) == "string" and potype.Type or nil)
+		or (type(potype) == "string" and potype or nil)
+	if not typeToCheck then return false end
+	local currentPoj = self
+	repeat
+		if currentPoj.Type == potype then return true end
+	until currentPoj.Prototype == nil
+	return false
+end
+
 return Poject
