@@ -3,7 +3,7 @@ function lovr.conf(T)
 	T.modules.data		= true
 	T.modules.event		= true
 	T.modules.graphics	= true
-	T.modules.headset	= true
+	T.modules.headset	= false
 	T.modules.math		= true
 	T.modules.physics	= true
 	T.modules.system	= true

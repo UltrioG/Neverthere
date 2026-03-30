@@ -11,9 +11,11 @@ local Poject = {
 	Type = "Poject"
 }
 
+---@generic T: Poject
 ---Returns a new object identical to the first.
----@return Poject Clone
-function Poject:Clone()
+---@param self T | Poject
+---@return T Clone
+function Poject.Clone(self)
 	---@type Poject
 	local new = {
 		Prototype = self,
