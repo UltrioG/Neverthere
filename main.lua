@@ -1,6 +1,7 @@
 require "Library.Globals"
 local BASIC = require "basic"
-local TextLabel = require "Library.TextLabel"
+local EVERYTHING = require "Library.Everything"
+local TextLabel = EVERYTHING.TextLabel
 
 function lovr.load()
 	
@@ -12,8 +13,9 @@ function lovr.update(dt)
 end
 
 local TL = TextLabel:Clone()
-TL.Text = "hii"
+-- TL.Text = "hii"
 TL.Position = {xScale = 0.5, yScale = 0.5}
+TL.Size = {xOffset = 20, yOffset = 20}
 
 ---@param pass Pass
 local function render2D(pass)
@@ -29,7 +31,7 @@ local function render2D(pass)
 	pass:setColor(0xFF8000)
 	TL.Position.xScale = math.lerp(0.25, 0.75, (math.cos(t)+1)/2)
 	TL.Position.yScale = math.lerp(0.25, 0.75, (math.sin(t)+1)/2)
-	TL.TextScale = math.lerp(0.8, 2, (math.cos(t)+1)/2)
+	-- TL.TextScale = math.lerp(0.8, 2, (math.cos(t)+1)/2)
 	TL.Rotation = math.lerp(0, math.pi/6, math.sin(t^2))
 	TL:Render(pass)
 end
