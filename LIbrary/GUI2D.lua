@@ -3,8 +3,8 @@ local POJ = require("Library.Poject")
 ---@class GUI2D: Poject
 ---@field Position UDim2
 ---@field Size UDim2
----@field Parent GUI2D
----@field Rotation number The radians counterclockwise the GUI2D spins
+---@field Parent GUI2D?		The "parent" of this GUI2D. Its position and scale will be relative to this object.
+---@field Rotation number 	The radians counterclockwise the GUI2D spins
 local GUI2D = POJ:Clone()
 GUI2D.Type = "GUI2D"
 GUI2D.Parent = GUI2D
@@ -15,7 +15,7 @@ GUI2D.Rotation = 0
 ---@return integer
 ---@return integer
 function GUI2D:GetAbsoluteSize()
-	if self == self.Parent then return lovr.system.getWindowDimensions() end
+	if not self.Parent then return lovr.system.getWindowDimensions() end
 	local xParent, yParent = self.Parent:GetAbsoluteSize()
 	return
 		math.round(xParent * (self.Size.xScale or 0) + (self.Size.xOffset or 0)),
@@ -26,7 +26,7 @@ end
 ---@return integer
 ---@return integer
 function GUI2D:GetAbsolutePosition()
-	if self == self.Parent then return 0,0 end
+	if not self.Parent then return 0,0 end
 	local wParent, hParent = self.Parent:GetAbsoluteSize()
 	local xParent, yParent = self.Parent:GetAbsolutePosition()
 	return
