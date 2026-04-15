@@ -1,6 +1,7 @@
 local GUI2D = require("Library.GUI2D")
 
 ---@class Rectangle: GUI2D
+---@field Prototype Rectangle | GUI2D
 ---@field BackgroundColor color?
 ---@field BorderColor color?
 local Rectangle = GUI2D:Clone()

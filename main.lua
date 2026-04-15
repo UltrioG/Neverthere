@@ -1,21 +1,18 @@
 require "Library.Globals"
 local BASIC = require "basic"
 local EVERYTHING = require "Library.Everything"
-local TextLabel = EVERYTHING.TextLabel
+local IMAGE2D = EVERYTHING.Image2D
+local EVERYWHERE = {}
 
 function lovr.load()
-	
+	EVERYWHERE.img = IMAGE2D:Clone()
+	EVERYWHERE.img.FileName = "assets/textures/FortunaTalkLog6.png"
 end
 
 local t = 0
 function lovr.update(dt)
 	t = t + dt
 end
-
-local TL = TextLabel:Clone()
--- TL.Text = "hii"
-TL.Position = {xScale = 0.5, yScale = 0.5}
-TL.Size = {xOffset = 20, yOffset = 20}
 
 ---@param pass Pass
 local function render2D(pass)
@@ -29,11 +26,7 @@ local function render2D(pass)
 	pass:setDepthTest()
 
 	pass:setColor(0xFF8000)
-	TL.Position.xScale = math.lerp(0.25, 0.75, (math.cos(t)+1)/2)
-	TL.Position.yScale = math.lerp(0.25, 0.75, (math.sin(t)+1)/2)
-	-- TL.TextScale = math.lerp(0.8, 2, (math.cos(t)+1)/2)
-	TL.Rotation = math.lerp(0, math.pi/6, math.sin(t^2))
-	TL:Render(pass)
+	EVERYWHERE.img:Render(pass)
 end
 
 function lovr.draw(pass)
