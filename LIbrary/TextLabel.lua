@@ -1,6 +1,7 @@
 local GUI2D = require("Library.GUI2D")
 
 ---@class TextLabel: GUI2D
+---@field Prototype TextLabel | GUI2D
 ---@field Text string|colortext The content to be displayed
 ---@field MaxCharacterPerLine integer? Maximum number of characters per line before wrapping. Nil to disable wrapping.
 ---@field HorizontalAlign "center"|"left"|"right"|nil

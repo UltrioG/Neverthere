@@ -1,6 +1,7 @@
 local POJ = require("Library.Poject")
 
 ---@class GUI2D: Poject
+---@field Prototype Poject | GUI2D
 ---@field Position UDim2
 ---@field Size UDim2
 ---@field Parent GUI2D?		The "parent" of this GUI2D. Its position and scale will be relative to this object.
