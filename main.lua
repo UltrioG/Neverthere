@@ -43,3 +43,28 @@ function lovr.draw(pass)
 
 	return false
 end
+
+function lovr.log(message, level, tag)
+	io.write(
+		("[%s] [%s] %s%s\n")
+		:format(getNowPrettier(), level:upper(), tag and ("[TAG %s] "):format(tag) or "", message)
+	)
+	io.flush()
+end
+
+function lovr.quit()
+	log("Exiting.")
+
+
+
+	log("Log finalized.")
+	LOG:close()
+	local timedLog, errmsg2 = io.open("./logs/"..getNow()..".log", "w")
+	if not timedLog then return false end
+	LOG, errmsg = io.open("./logs/latest.log", "r")
+	if not LOG then return false end
+	timedLog:write(LOG:read("*a"))
+	timedLog:close()
+	LOG:close()
+	return false
+end
