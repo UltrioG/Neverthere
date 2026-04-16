@@ -19,6 +19,7 @@ end
 
 ---@param pass Pass
 local function render2D(pass)
+	pass:setBlendMode(nil, "alphamultiply")
 	local font = lovr.graphics.getDefaultFont()
 	font:setPixelDensity(1)
 

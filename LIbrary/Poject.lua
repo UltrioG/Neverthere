@@ -71,7 +71,6 @@ function Poject:GetPrototype()
 	---@type Poject
 	local herence = self
 	repeat
-		log(herence.Type, herence.isPrototype)
 		herence = herence.__Prototype
 		if herence == herence.__Prototype then	-- Top of the chain
 			if herence.isPrototype then return herence end
