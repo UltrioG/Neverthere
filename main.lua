@@ -5,8 +5,11 @@ local IMAGE2D = EVERYTHING.Image2D
 local EVERYWHERE = {}
 
 function lovr.load()
-	EVERYWHERE.img = IMAGE2D:Clone()
-	EVERYWHERE.img.FileName = "assets/textures/FortunaTalkLog6.png"
+	EVERYWHERE.img = IMAGE2D:Clone() --[[@as Image2D]]
+	EVERYWHERE.img.FileName = "/assets/textures/FortunaTalkLog6.png"
+	EVERYWHERE.img.Size = {xOffset = 256, yOffset = 256}
+	EVERYWHERE.img.Rotation = math.pi
+	-- EVERYWHERE.img.BackgroundAlpha = 0
 end
 
 local t = 0
@@ -45,14 +48,14 @@ function lovr.log(message, level, tag)
 	io.flush()
 end
 
-function lovr.quit()
+local function logExit()
 	log("Exiting.")
 
 
 
 	log("Log finalized.")
 	LOG:close()
-	local timedLog, errmsg2 = io.open("./logs/"..getNow()..".log", "w")
+	local timedLog, errmsg2 = io.open("./logs/" .. getNow() .. ".log", "w")
 	if not timedLog then return false end
 	LOG, errmsg = io.open("./logs/latest.log", "r")
 	if not LOG then return false end
@@ -60,4 +63,17 @@ function lovr.quit()
 	timedLog:close()
 	LOG:close()
 	return false
+end
+
+function lovr.quit()
+	return logExit()
+end
+
+function lovr.threaderror(thread, message)
+	local function formatTraceback(s)
+		return s:gsub('\n[^\n]+$', ''):gsub('\t', ''):gsub('stack traceback:', '\nStack:\n')
+	end
+	err(message..formatTraceback(debug.traceback("",4)))
+	logExit()
+	lovr.event.push("errhand", message)
 end

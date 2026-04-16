@@ -54,6 +54,29 @@ function log(...)
 	io.flush()
 end
 
+---Custom implementation which works with logging.<br>
+---Graciously stolen and adapted from https://stackoverflow.com/a/7153689
+---@param ... any
+function err(...)
+	local S = ""
+	local write = function (s)
+		S = S .. s
+	end
+
+	local n = select("#",...)
+    for i = 1,n do
+        local v = tostring(select(i,...))
+        write(v)
+        if i~=n then write'\t' end
+    end
+
+	io.write(
+		("[%s] [%s] [TAG %s] %s\n")
+		:format(getNowPrettier(), "ERROR", "user", S)
+	)
+	io.flush()
+end
+
 LOG, errmsg = io.open("./logs/latest.log", "w")
 if not LOG then error("Cannot create log file with error "..tostring(errmsg)) end
 io.output(LOG)

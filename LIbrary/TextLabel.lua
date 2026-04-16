@@ -7,7 +7,7 @@ local GUI2D = require("Library.GUI2D")
 ---@field HorizontalAlign "center"|"left"|"right"|nil
 ---@field VerticalAlign "bottom"|"middle"|"top"|nil
 ---@field TextScale number How big the text is. Requires testing.
-local TextLabel = GUI2D:Clone()
+local TextLabel = GUI2D:Inherit()
 TextLabel.Type = "TextLabel"
 TextLabel.Text = "Don't you think you should've moved on by now?"
 TextLabel.TextScale = 1
