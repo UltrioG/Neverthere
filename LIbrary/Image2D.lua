@@ -15,7 +15,9 @@ function Image2D:Render(pass)
 	local texture = lovr.graphics.newTexture(self.FileName, {})
 	local sizeX, sizeY = self:GetAbsoluteSize()
 	local x, y = self:GetAbsolutePosition()
-	pass:draw(texture, x, y, 0, sizeX, self.Rotation, 0, 0, -1)
+	pass:setColor(0xFFFFFF, self.ImageAlpha)
+	local m4 = lovr.math.mat4(vec3(x, y, 0), vec3(-sizeX, sizeY, 0), quat(self.Rotation, 0,0,-1))
+	pass:draw(texture, m4)
 end
 
 return Image2D

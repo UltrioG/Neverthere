@@ -7,9 +7,10 @@ local EVERYWHERE = {}
 function lovr.load()
 	EVERYWHERE.img = IMAGE2D:Clone() --[[@as Image2D]]
 	EVERYWHERE.img.FileName = "/assets/textures/FortunaTalkLog6.png"
-	EVERYWHERE.img.Size = {xOffset = 256, yOffset = 256}
+	EVERYWHERE.img.Size = {xOffset = 640, yOffset = 640}
+	EVERYWHERE.img.Position = {xScale = 0.5, yScale = .7}
 	EVERYWHERE.img.Rotation = math.pi
-	-- EVERYWHERE.img.BackgroundAlpha = 0
+	EVERYWHERE.img.BackgroundAlpha = 0
 end
 
 local t = 0
@@ -19,7 +20,6 @@ end
 
 ---@param pass Pass
 local function render2D(pass)
-	pass:setBlendMode(nil, "alphamultiply")
 	local font = lovr.graphics.getDefaultFont()
 	font:setPixelDensity(1)
 
