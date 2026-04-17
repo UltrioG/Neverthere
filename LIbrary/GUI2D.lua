@@ -1,14 +1,16 @@
 local POJ = require("Library.Poject")
 
 ---@class GUI2D: Poject
+---@field Prototype Poject | GUI2D
 ---@field Position UDim2
 ---@field Size UDim2
 ---@field Parent GUI2D?		The "parent" of this GUI2D. Its position and scale will be relative to this object.
 ---@field Rotation number 	The radians counterclockwise the GUI2D spins
-local GUI2D = POJ:Clone()
+local GUI2D = POJ:Inherit()
 GUI2D.Type = "GUI2D"
 GUI2D.Position = {xScale = 0.5, yScale = 0.5}
 GUI2D.Rotation = 0
+GUI2D.Size = {xOffset = 10, yOffset = 10}
 
 ---Gets the pixel size of the GUI2D.
 ---@return integer
