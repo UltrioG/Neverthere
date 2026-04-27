@@ -1,16 +1,16 @@
 local Rectangle = require("Library.Rectangle")
 
----@class Image2D: Rectangle
+---@class Decal: Rectangle
 ---@field FileName string
----@field Prototype Image2D | Rectangle
+---@field Prototype Decal | Rectangle
 ---@field ImageAlpha percentage
-local Image2D = Rectangle:Inherit()
-Image2D.Type = "Image"
-Image2D.isPrototype = true
+local Decal = Rectangle:Inherit()
+Decal.Type = "Decal"
+Decal.isPrototype = true
 
 ---Render this Image.
 ---@param pass Pass
-function Image2D:Render(pass)
+function Decal:Render(pass)
 	self:GetPrototype():GetPrototype().Render(self, pass)
 	local texture = lovr.graphics.newTexture(self.FileName, {})
 	local sizeX, sizeY = self:GetAbsoluteSize()
@@ -20,4 +20,4 @@ function Image2D:Render(pass)
 	pass:draw(texture, m4)
 end
 
-return Image2D
+return Decal
