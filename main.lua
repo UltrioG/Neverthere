@@ -13,7 +13,7 @@ end
 function lovr.draw(pass)
 	BASIC.plane(pass)
 
-	GuiManager.render2D(pass)
+	GuiManager.Render2D(pass)
 
 	return false
 end
