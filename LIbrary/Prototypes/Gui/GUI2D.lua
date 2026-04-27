@@ -1,4 +1,4 @@
-local POJ = require("Library.Hierach")
+local POJ = require("Library.Prototypes.Hierach")
 
 ---@class GUI2D: Hierach
 ---@field Prototype Hierach | GUI2D

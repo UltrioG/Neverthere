@@ -1,7 +1,6 @@
 require "Library.Globals"
 local BASIC = require "basic"
-local EVERYTHING = require "Library.Everything"
-local IMAGE2D = EVERYTHING.Image2D
+local IMAGE2D = require("Library.Prototypes.Gui.Image2D")
 local EVERYWHERE = {}
 
 function lovr.load()

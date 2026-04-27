@@ -1,4 +1,4 @@
-local POJ = require("Library.Poject")
+local POJ = require("Library.Prototypes.Poject")
 
 ---@class Hierach: Poject
 ---@field Prototype Poject | Hierach

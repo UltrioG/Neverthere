@@ -1,4 +1,4 @@
-local Rectangle = require("Library.Rectangle")
+local Rectangle = require("Library.Prototypes.Gui.Rectangle")
 
 ---@class Image2D: Rectangle
 ---@field FileName string
