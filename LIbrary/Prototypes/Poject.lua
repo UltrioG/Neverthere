@@ -1,4 +1,6 @@
 ---Custom Prototype-based object.
+---Getters can be implemented by writing a function named `get_PROPERTYHERE`.
+---Setters can be implemented by writing a function named `set_PROPERTYHERE`.
 ---@class Poject
 ---@field __Prototype Poject The Prototype from which methods inherit from.
 ---@field Type string The "type" of this object.
@@ -21,14 +23,20 @@ function Poject.Clone(self)
 	}
 	setmetatable(new, {
 		__index = function (T, k)
-			if rawget(T, k) ~= nil then return rawget(T, k) end
-			-- if type(k) == "string" then
-			-- 	-- Getters
-			-- 	if type(rawget(T, "get_"..k)) == "function" then return rawget(T, "get_"..k) end
-			-- end
+			local getter = rawget(T, "get_"..k)
+			if type(k) == "string" and type(getter) == "function" then return getter(T) end
+			
 			local prototype = rawget(T, "__Prototype")
 			if not prototype then return nil end
-			return prototype[k]
+			local protoProp = prototype[k]
+			if protoProp then return protoProp end
+			local protoGet = prototype["get_"..k]
+			if type(k) == "string" and type(protoGet) == 'function' then return protoGet(T) end
+		end,
+		__newindex = function(T,k,v)
+			local setter = T["set_"..k]
+			if type(setter) == "function" then setter(T, v) end
+			rawset(T, k, v)
 		end
 	})
 	return new
