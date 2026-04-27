@@ -1,4 +1,4 @@
-local GUI2D = require("Library.GUI2D")
+local GUI2D = require("Library.Prototypes.Gui.GUI2D")
 
 ---@class Rectangle: GUI2D
 ---@field Prototype Rectangle | GUI2D

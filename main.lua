@@ -2,7 +2,8 @@ require "Library.Globals"
 
 local GuiManager = require "GuiManager"
 local BASIC = require "basic"
-
+local IMAGE2D = require("Library.Prototypes.Gui.Image2D")
+local EVERYWHERE = {}
 
 function lovr.load()
 	

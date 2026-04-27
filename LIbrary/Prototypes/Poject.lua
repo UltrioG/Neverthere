@@ -1,12 +1,24 @@
----Custom Prototype-based object.
+---Custom Prototype-based object.<br>
+---Getters can be implemented by writing a function named `get_PROPERTYHERE`.<br>
+---Setters can be implemented by writing a function named `set_PROPERTYHERE`.<br>
+---Constructor can be implemented by writing a function named `constructor`.<br>
 ---@class Poject
 ---@field __Prototype Poject The Prototype from which methods inherit from.
 ---@field Type string The "type" of this object.
 ---@field isPrototype boolean Whether this object is a prototype.
+---@field constructor (fun(Poject): nil)? An optional function which modifies the Poject on cloning.
 local Poject = {
 	Type = "Poject",
 	isPrototype = true
 }
+
+local function isFunction(x)
+	return type(x) == "function"
+end
+
+local function isString(x)
+	return type(x) == "string"
+end
 
 ---@generic T: Poject
 ---Returns a new object identical to the first.
@@ -17,20 +29,30 @@ function Poject.Clone(self)
 	local new = {
 		__Prototype = self,
 		Type = self.Type,
-		isPrototype = false
+		isPrototype = false,
 	}
+
 	setmetatable(new, {
 		__index = function (T, k)
-			if rawget(T, k) ~= nil then return rawget(T, k) end
-			-- if type(k) == "string" then
-			-- 	-- Getters
-			-- 	if type(rawget(T, "get_"..k)) == "function" then return rawget(T, "get_"..k) end
-			-- end
+			local getter = rawget(T, "get_"..k)
+			if isString(k) and isFunction(getter) then return getter(T) end
+			
 			local prototype = rawget(T, "__Prototype")
 			if not prototype then return nil end
-			return prototype[k]
+			local protoProp = prototype[k]
+			if protoProp then return protoProp end
+			local protoGet = prototype["get_"..k]
+			if isString(k) and isFunction(protoGet) then return protoGet(T) end
+		end,
+		__newindex = function(T,k,v)
+			local setter = T["set_"..k]
+			if isFunction(setter) then setter(T, v) end
+			rawset(T, k, v)
 		end
 	})
+
+	local constr = self.constructor --[[@as function]]
+	if isFunction(constr) then constr(new) end
 	return new
 end
 

@@ -1,4 +1,4 @@
-local Rectangle = require("Library.Rectangle")
+local Rectangle = require("Library.Prototypes.Gui.Rectangle")
 
 ---@class Decal: Rectangle
 ---@field FileName string
