@@ -18,6 +18,11 @@ end
 ---@param child Hierach
 ---@return T parent The parent hierach.
 function Hierach:AddChild(child)
+	if child.Parent then
+		for i, v in ipairs(child.Parent._Children) do
+			if v == child then table.remove(child.Parent._Children, i) break end
+		end
+	end
 	rawset(child, "_Parent", self)
 	table.insert(self._Children, child)
 	return self
