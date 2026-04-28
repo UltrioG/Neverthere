@@ -2,8 +2,8 @@ local POJ = require("Library.Prototypes.Poject")
 
 ---@class Hierach: Poject
 ---@field Prototype Poject | Hierach
----@field Parent Hierach?		The "parent" of this Hierach.
----@field _Parent Hierach?		The actual parent of this Hierach.
+---@field Parent Hierach?		The parent of this Hierach.
+---@field _Parent Hierach?		The internally used actual parent of this Hierach. Please do not modify directly.
 ---@field _Children [Hierach]	The children of this Hierach.
 local Hierach = POJ:Inherit()
 Hierach.Type = "Hierach"
@@ -42,6 +42,18 @@ end
 ---@return T Parent
 function Hierach:get_Parent()
 	return rawget(self, "_Parent")
+end
+
+---Clears all children of this Hierach.
+---@generic T: Hierach
+---@param self T | Hierach
+---@return T | Hierach self
+function Hierach:ClearAllChildren()
+	for _, v in ipairs(self:GetChildren()) do
+		v.Parent = nil
+	end
+	self._Children = {}
+	return self
 end
 
 return Hierach
