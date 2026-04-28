@@ -62,7 +62,7 @@ function GuiManager.RemoveGuiObject(gui2d)
 		local children = current:GetChildren()
 		for _, v in ipairs(children) do table.insert(removalQueue,v) end
 		current.Parent = nil
-		current._Children = {}
+		current:ClearAllChildren()
 	until #removalQueue == 0
 end
 
