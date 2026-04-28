@@ -7,9 +7,9 @@ local POJ = require("Library.Prototypes.Hierach")
 ---@field Rotation number 	The radians counterclockwise the GUI2D spins
 local GUI2D = POJ:Inherit()
 GUI2D.Type = "GUI2D"
-GUI2D.Position = {xScale = 0.5, yScale = 0.5}
+GUI2D.Position = {xOffset = 0, yOffset = 0, xScale = 0, yScale = 0}
+GUI2D.Size = {xScale = 1, yScale = 1}
 GUI2D.Rotation = 0
-GUI2D.Size = {xOffset = 10, yOffset = 10}
 
 ---Gets the pixel size of the GUI2D.
 ---@return integer
