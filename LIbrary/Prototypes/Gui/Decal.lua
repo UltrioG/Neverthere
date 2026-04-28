@@ -16,7 +16,7 @@ function Decal:Render(pass)
 	local sizeX, sizeY = self:GetAbsoluteSize()
 	local x, y = self:GetAbsolutePosition()
 	pass:setColor(0xFFFFFF, self.DecalAlpha)
-	local m4 = lovr.math.mat4(vec3(x, y, 0), vec3(-sizeX, sizeY, 0), quat(self.Rotation, 0,0,-1))
+	local m4 = lovr.math.mat4(vec3(x, y, 0), vec3(-sizeX, sizeY, 0), quat(self.Rotation+math.pi, 0,0,-1))
 	pass:draw(texture, m4)
 end
 
