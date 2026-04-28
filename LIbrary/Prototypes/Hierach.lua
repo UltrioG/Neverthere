@@ -3,6 +3,7 @@ local POJ = require("Library.Prototypes.Poject")
 ---@class Hierach: Poject
 ---@field Prototype Poject | Hierach
 ---@field Parent Hierach?		The "parent" of this Hierach.
+---@field _Parent Hierach?		The actual parent of this Hierach.
 ---@field _Children [Hierach]	The children of this Hierach.
 local Hierach = POJ:Inherit()
 Hierach.Type = "Hierach"
@@ -17,7 +18,7 @@ end
 ---@param child Hierach
 ---@return T parent The parent hierach.
 function Hierach:AddChild(child)
-	child.Parent = self
+	rawset(child, "_Parent", self)
 	table.insert(self._Children, child)
 	return self
 end
@@ -30,6 +31,17 @@ function Hierach:GetChildren()
 	return children
 end
 
+---Setter for setting Parent
+---@param P Hierach
+function Hierach:set_Parent(P)
+	P:AddChild(self)
+end
 
+---Getter for getting Parent
+---@generic T: Hierach
+---@return T Parent
+function Hierach:get_Parent()
+	return rawget(self, "_Parent")
+end
 
 return Hierach

@@ -80,7 +80,8 @@ function Poject:IsA(potype)
 	local currentPoj = self
 	repeat
 		if currentPoj.Type == potype then return true end
-	until currentPoj.__Prototype == nil
+		currentPoj = currentPoj:GetPrototype()
+	until currentPoj.__Prototype == currentPoj
 	return false
 end
 
