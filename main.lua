@@ -1,15 +1,17 @@
 require "Library.Globals"
 
 local GuiManager = require "GuiManager"
+local XML = require "Library.xml"
 local BASIC = require "basic"
-local IMAGE2D = require("Library.Prototypes.Gui.Image2D")
-local EVERYWHERE = {}
 
 function lovr.load()
-	
+	local guitestfile = io.open("./guitest.xml", "r")
+	if not guitestfile then goto skip1 end
+	local read = guitestfile:read("*a")
+	local parsedXML = XML.parse(read)
+	local bigTree = GuiManager.DOMToTree(parsedXML)
+	::skip1::
 end
-
-
 
 function lovr.draw(pass)
 	BASIC.plane(pass)

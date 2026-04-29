@@ -1,0 +1,6 @@
+<Decal
+	FileName 		= "/assets/textures/FortunaTalkLog6.png"
+	Position 		= udim2(.5,0,1,-300)
+	Size 			= udim2(0,600,0,600)
+	BackgroundAlpha	= 0
+/>
