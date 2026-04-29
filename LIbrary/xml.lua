@@ -81,7 +81,7 @@ function XML.parse(xml)
 			if not isClosing then
 				local attributes = {}
 				for attr, val in cleanMatched:gmatch("(%w+)%s*=%s*([^%s>]+)") do
-					attributes[attr] = val
+					attributes[attr] = val:gsub('^"([^"]*)"$', "%1"):gsub("^'([^']*)'$", "%1")
 				end
 				local newdom = newDom(tag, attributes)
 				if top then
