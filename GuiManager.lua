@@ -33,7 +33,6 @@ function GuiManager.Render2D(pass)
 		local children = current:GetChildren()
 		for _, v in ipairs(children) do table.insert(renderQueue,v) end
 		current:Render(pass)
-		log(current:GetAbsolutePosition())
 	until #renderQueue == 0
 end
 
@@ -93,11 +92,11 @@ local NUMBER_PATTERN = "^[+-]?%d*%.%d+$"
 ---@return [totalType]
 ---@return [returnable]
 function parseTupleToDatas(s)
-	local substring = s:sub(2,-2)
 	local tupled = {}
 	local data = {}
 	local types = {}
-	for tupler in substring:gmatch("[^,]+,?") do
+	for tupler in s:gmatch("[^,]+,?") do
+		local tupler = tupler:gsub(",$", "")
 		table.insert(tupled, tupler)
 		local t, d = parseStringToData(tupler)
 		table.insert(data, d)
@@ -204,7 +203,7 @@ function GuiManager.DOMToTree(DOM)
 			if type("child") ~= "string" then table.insert(doms, child) end
 		end
 		local obj = GuiManager.AddGuiObject(current.tag)
-		for attribute, value in pairs(current.attributes) do obj[attribute] = parseStringToData(value) end
+		for attribute, value in pairs(current.attributes) do _, obj[attribute] = parseStringToData(value) end
 		domToGuis[current] = obj
 	until i == #doms
 	for _, dom in ipairs(doms) do
