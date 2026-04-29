@@ -193,7 +193,24 @@ end
 ---@param DOM DOM
 ---@return GUI2D root
 function GuiManager.DOMToTree(DOM)
-	
+	---@type [DOM]
+	local doms = {DOM}
+	local i = 1
+	---@type {[DOM]: GUI2D}
+	local domToGuis = {}
+	repeat
+		local current = doms[i]
+		for _, child in ipairs(current.innerXML) do
+			if type("child") ~= "string" then table.insert(doms, child) end
+		end
+		local obj = GuiManager.AddGuiObject(current.tag)
+		for attribute, value in pairs(current.attributes) do obj[attribute] = parseStringToData(value) end
+		domToGuis[current] = obj
+	until i == #doms
+	for _, dom in ipairs(doms) do
+		domToGuis[dom].Parent = domToGuis[dom.parent]
+	end
+	return domToGuis[DOM]
 end
 
 return GuiManager
