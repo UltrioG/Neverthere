@@ -31,6 +31,18 @@ function getNowPrettier()
 	return os.date("%Y-%m-%d %H:%M:%S") --[[@as string]]
 end
 
+---Checks whether two lists are equal.<br>
+---It is a shallow check meaning internal tables are equal iff they are the same table in memory.
+---@generic T
+---@param T1 [T]
+---@param T2 [T]
+---@return boolean
+function listEqual(T1, T2)
+	if #T1 ~= #T2 then return false end
+	for i, v in ipairs(T1) do if v ~= T2[i] then return false end end
+	return true
+end
+
 ---Custom implementation which works with logging.<br>
 ---Graciously stolen and adapted from https://stackoverflow.com/a/7153689
 ---@param ... any
