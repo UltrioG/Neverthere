@@ -2,7 +2,7 @@ local XML = {}
 
 ---@class DOM A table representing an XML element.
 ---@field tag string The tag of the XML element.
----@field attributes {[string]: any} A dictionary of the attributes of the XML element.
+---@field attributes {[string]: string} A dictionary of the attributes of the XML element.
 ---@field innerXML [string | DOM] The stuff inside the XML element.
 ---@field parent DOM?
 local DOM = {}
