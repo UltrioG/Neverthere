@@ -68,7 +68,8 @@ end
 
 ---Custom implementation which works with logging.<br>
 ---Graciously stolen and adapted from https://stackoverflow.com/a/7153689
----@param ... any
+---Does not actually raise any errors, just logs it tagged as errors.
+---@param ... any The values which will be logged. `tostring` will be called upon them.
 function err(...)
 	local S = ""
 	local write = function (s)
