@@ -31,10 +31,13 @@ function getNowPrettier()
 	return os.date("%Y-%m-%d %H:%M:%S") --[[@as string]]
 end
 
----Custom implementation which works with logging.<br>
+---Turns a series of arguments into a format for logging.
 ---Graciously stolen and adapted from https://stackoverflow.com/a/7153689
----@param ... any
-function log(...)
+---@param severity severityLevel How severe this log mesage is
+---@param tag "User" | string The origin of the message
+---@param ... any The content of the message
+---@return string
+function formatForLog(severity, tag, ...)
 	local S = ""
 	local write = function (s)
 		S = S .. s
@@ -46,39 +49,41 @@ function log(...)
         write(v)
         if i~=n then write'\t' end
     end
-
-	io.write(
-		("[%s] [%s] [TAG %s] %s\n")
-		:format(getNowPrettier(), "INFO", "user", S)
-	)
-	io.flush()
+	
+	return ("[%s] [%s] [TAG %s] %s\n")
+		:format(getNowPrettier(), severity:upper(), tag, S)
 end
 
----Custom implementation which works with logging.<br>
----Graciously stolen and adapted from https://stackoverflow.com/a/7153689
+---Writes a message to the log.
+---It is preferred to use `print` as it has been replaced to write to both console and log.
 ---@param ... any
-function err(...)
-	local S = ""
-	local write = function (s)
-		S = S .. s
-	end
+function log(...)
+	local result = formatForLog("info", "User", ...)
 
-	local n = select("#",...)
-    for i = 1,n do
-        local v = tostring(select(i,...))
-        write(v)
-        if i~=n then write'\t' end
-    end
+	LOG:write(result)
+	LOG:flush()
+end
 
-	io.write(
-		("[%s] [%s] [TAG %s] %s\n")
-		:format(getNowPrettier(), "ERROR", "user", S)
-	)
-	io.flush()
+local cprint = print
+---Custom implementation which works with logging.<br>
+---Prints with the usual `print` function and also writes it to the log.
+---@param ... any
+function print(...)
+	log(...)
+	cprint(...)
+end
+
+---Writes an error to the log.
+---Does not trigger program shutdown, but is used when program shuts down.
+---@param ... any
+function errLog(...)
+	local result = formatForLog("error", "User", ...)
+
+	LOG:write(result)
+	LOG:flush()
 end
 
 LOG, errmsg = io.open("./logs/latest.log", "w")
-if not LOG then error("Cannot create log file with error "..tostring(errmsg)) end
-io.output(LOG)
-log("Log initialized.")
-io.flush()
+if not LOG then error("Cannot create log file with error "..tostring(errmsg)) else
+	print("Log initialized.")
+end

@@ -40,20 +40,10 @@ function lovr.draw(pass)
 	return false
 end
 
-function lovr.log(message, level, tag)
-	io.write(
-		("[%s] [%s] %s%s\n")
-		:format(getNowPrettier(), level:upper(), tag and ("[TAG %s] "):format(tag) or "", message)
-	)
-	io.flush()
-end
-
 local function logExit()
-	log("Exiting.")
-
-
-
-	log("Log finalized.")
+	if not LOG then return false end
+	print("Exiting.")
+	print("Log finalized.")
 	LOG:close()
 	local timedLog, errmsg2 = io.open("./logs/" .. getNow() .. ".log", "w")
 	if not timedLog then return false end
@@ -69,11 +59,8 @@ function lovr.quit()
 	return logExit()
 end
 
-function lovr.threaderror(thread, message)
-	local function formatTraceback(s)
-		return s:gsub('\n[^\n]+$', ''):gsub('\t', ''):gsub('stack traceback:', '\nStack:\n')
-	end
-	err(message..formatTraceback(debug.traceback("",4)))
-	logExit()
-	lovr.event.push("errhand", message)
+local originalErrhand = lovr.errhand
+function lovr.errhand(message)
+	if LOG then errLog(message) end
+	return originalErrhand(message)
 end
