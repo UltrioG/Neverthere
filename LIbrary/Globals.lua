@@ -1,7 +1,5 @@
 ---@meta
 
----@alias numeric number|Vec2|Vec3|Vec4|Mat4
-
 ---Rounds a number.
 ---@param x number
 ---@return integer
@@ -58,6 +56,7 @@ end
 ---It is preferred to use `print` as it has been replaced to write to both console and log.
 ---@param ... any
 function log(...)
+	if not LOG then return end
 	local result = formatForLog("info", "User", ...)
 
 	LOG:write(result)
