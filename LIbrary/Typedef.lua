@@ -3,6 +3,8 @@
 ---@alias colortext table
 ---@alias color number 		Preferably Hex Color
 ---@alias percentage number from 0 to 1
+---@alias severityLevel "debug" | "info" | "warn" | "error"
+---@alias numeric number|Vec2|Vec3|Vec4|Mat4
 
 ---@class UDim2
 ---@field xScale number?
