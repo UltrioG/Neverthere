@@ -1,20 +1,22 @@
 ---@meta
 
----Rounds a number.
----@param x number
----@return integer
-math.round = function (x)
-	return math.floor(x) + math.floor(2*(x%1))
-end
+do	-- Math lib changes
+	---Rounds a number.
+	---@param x number
+	---@return integer
+	math.round = function (x)
+		return math.floor(x) + math.floor(2*(x%1))
+	end
 
----Linear Interpolation
----@generic T: numeric
----@param a T
----@param b T
----@param t number
----@return T
-math.lerp = function (a, b, t)
-	return (b-a)*t+a
+	---Linear Interpolation
+	---@generic T: numeric
+	---@param a T
+	---@param b T
+	---@param t number
+	---@return T
+	math.lerp = function (a, b, t)
+		return (b-a)*t+a
+	end
 end
 
 ---Get a string indicating the current time.
@@ -77,6 +79,17 @@ end
 ---@param ... any
 function errLog(...)
 	local result = formatForLog("error", "User", ...)
+
+	LOG:write(result)
+	LOG:flush()
+end
+
+---Prints with a warning tag.
+---@param ... any
+function warn(...)
+	cprint("WARNING:", ...)
+	if not LOG then return end
+	local result = formatForLog("warn", "User", ...)
 
 	LOG:write(result)
 	LOG:flush()
