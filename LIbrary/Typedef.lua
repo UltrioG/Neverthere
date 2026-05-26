@@ -5,6 +5,7 @@
 ---@alias percentage number from 0 to 1
 ---@alias severityLevel "debug" | "info" | "warn" | "error"
 ---@alias numeric number|Vec2|Vec3|Vec4|Mat4
+---@alias jsonType "true" | "false" | "null" | "string" | "number" | "array" | "object"
 
 ---@class UDim2
 ---@field xScale number?
