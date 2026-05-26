@@ -19,6 +19,15 @@ do	-- Math lib changes
 	end
 end
 
+do	-- String lib changes
+	---Gets the first character in a string
+	---@param s string
+	---@return string
+	string.first = function (s)
+		return s:sub(1,1)
+	end
+end
+
 ---Get a string indicating the current time.
 ---@return string
 function getNow()
