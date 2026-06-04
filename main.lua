@@ -1,16 +1,18 @@
 require "Library.Globals"
 
 local GuiManager = require "GuiManager"
-local XML = require "Library.xml"
+local JSON = require "Library.json"
 local BASIC = require "basic"
 
 function lovr.load()
-	local guitestfile = io.open("./guitest.xml", "r")
-	if not guitestfile then goto skip1 end
-	local read = guitestfile:read("*a")
-	local parsedXML = XML.parse(read)
-	local bigTree = GuiManager.DOMToTree(parsedXML)
-	::skip1::
+	local O = JSON.parsePath("test.json")
+	if type(O) == "table" then
+		for k, v in pairs(O) do
+			print(k,v)
+		end
+	else
+		print(O)
+	end
 end
 
 function lovr.draw(pass)

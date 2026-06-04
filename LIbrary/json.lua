@@ -74,16 +74,18 @@ function JSON.parse(s)
 			goto continue
 
 			::unicode::
-			local code = s:sub(index + 1, index + 4)
-			if code:match("%X") then
-				error((
-					"JSON Error: Nonhexadecimal digit while decoding \\u.\nContext: '%s'"
-				):format(s:sub(math.max(1, index - 16), math.min(#s, index + 16))))
+			do
+				local code = s:sub(index + 1, index + 4)
+				if code:match("%X") then
+					error((
+						"JSON Error: Nonhexadecimal digit while decoding \\u.\nContext: '%s'"
+					):format(s:sub(math.max(1, index - 16), math.min(#s, index + 16))))
+				end
+				--shut the fuck up please thank you
+				---@diagnostic disable-next-line: undefined-field
+				foundString = foundString .. utf8.char(tonumber(code, 16))
+				index = index + 4
 			end
-			--shut the fuck up please thank you
-			---@diagnostic disable-next-line: undefined-field
-			foundString = foundString .. utf8.char(tonumber(code, 16))
-			index = index + 4
 			goto continue
 
 			::continue::
@@ -97,8 +99,14 @@ function JSON.parse(s)
 		local list = {}
 		local index = s:find('%[') + 1
 		while true do
-			if s:match("%s*%]", index) then index = index + #s:match("%s*%]", index) break end
-			if s:match("%s*,", index) then index = index + #s:match("%s*,", index) goto continue end
+			if s:match("%s*%]", index) then
+				index = index + #s:match("%s*%]", index)
+				break
+			end
+			if s:match("%s*,", index) then
+				index = index + #s:match("%s*,", index)
+				goto continue
+			end
 			local parsed, length = JSON.parse(s:sub(index))
 			table.insert(list, parsed)
 			index = index + length
@@ -117,8 +125,11 @@ function JSON.parse(s)
 		local isFirstElement = true
 		while true do
 			if expectingString then
-				if s:match("^%s*}") then index = index + #s:match("^%s*}") break end
-				if not isFirstElement and not s:match("^%s,") then
+				if s:sub(index):match("^%s*}") then
+					index = index + #s:sub(index):match("^%s*}")
+					break
+				end
+				if not isFirstElement and not s:sub(index):match("^%s*,") then
 					error((
 						"JSON Error: Missing separator comma.\nContext '%s'."
 					):format(s:sub(math.max(1, index - 16), math.min(#s, index + 16))))
@@ -131,16 +142,19 @@ function JSON.parse(s)
 				end
 				strindex = str
 				index = index + len
-				if not s:match("^%s*:") then error((
-					"JSON Error: No colon found for object.\nContext '%s'"
-				):format(s:sub(math.max(1, index - 16), math.min(#s, index + 16)))) end
-				index = index + #str:match("^%s*")
+				if not s:sub(index):match("^%s*:") then
+					error((
+						"JSON Error: No colon found for object.\nContext '%s'"
+					):format(s:sub(math.max(1, index - 16), math.min(#s, index + 16))))
+				end
+				index = index + #s:sub(index):match("^%s*:")
 				expectingString = false
 			else
 				local val, len = JSON.parse(s:sub(index))
 				index = index + len
 				dict[strindex] = val
 				isFirstElement = false
+				expectingString = true
 			end
 		end
 		return dict, index, "object"
@@ -149,6 +163,16 @@ function JSON.parse(s)
 	error((
 		"JSON Error: Unrecognized symbols.\nContext '%s'"
 	):format(s:sub(1, math.min(#s, 17))))
+end
+
+---Parses a json file from its path into an object.
+---@param filePath string
+---@return jsonType
+function JSON.parsePath(filePath)
+	local F = assert(io.open(filePath, "r"), "File not found!")
+	local O = JSON.parse(F:read("*a"))
+	F:close()
+	return O
 end
 
 return JSON
