@@ -129,10 +129,14 @@ function JSON.parse(s)
 					index = index + #s:sub(index):match("^%s*}")
 					break
 				end
-				if not isFirstElement and not s:sub(index):match("^%s*,") then
-					error((
-						"JSON Error: Missing separator comma.\nContext '%s'."
-					):format(s:sub(math.max(1, index - 16), math.min(#s, index + 16))))
+				if not isFirstElement then
+					if s:sub(index):match("^%s*,") then
+						index = index + 1
+					else
+						error((
+							"JSON Error: Missing separator comma.\nContext '%s'."
+						):format(s:sub(math.max(1, index - 16), math.min(#s, index + 16))))
+					end
 				end
 				local str, len, ty = JSON.parse(s:sub(index))
 				if ty ~= "string" then
