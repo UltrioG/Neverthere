@@ -13,3 +13,8 @@
 ---@field xOffset integer?
 ---@field yOffset integer?
 UDim2 = {}
+
+-- These are for clarity
+---@alias queue<T> [T]
+---@alias stack<T> [T]
+---@alias dictionary<T> {[string]: T}

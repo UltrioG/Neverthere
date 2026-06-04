@@ -3,16 +3,11 @@ require "Library.Globals"
 local GuiManager = require "GuiManager"
 local JSON = require "Library.json"
 local BASIC = require "basic"
+local PRETTY = require "Library.Pretty"
 
 function lovr.load()
 	local O = JSON.parsePath("test.json")
-	if type(O) == "table" then
-		for k, v in pairs(O) do
-			print(k,v)
-		end
-	else
-		print(O)
-	end
+	PRETTY.print(O)
 end
 
 function lovr.draw(pass)
