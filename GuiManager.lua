@@ -25,7 +25,7 @@ function GuiManager.Render2D(pass)
 	pass:setDepthTest()
 	--#endregion Basic Setup
 
-	---@type [GUI2D]
+	---@type queue<GUI2D>
 	local renderQueue = {GuiRoot}
 	repeat
 		---@type GUI2D
@@ -62,6 +62,12 @@ function GuiManager.RemoveGuiObject(gui2d)
 		current.Parent = nil
 		current:ClearAllChildren()
 	until #removalQueue == 0
+end
+
+---Directly adds a GUI2D into the hierachy.
+---@param O GUI2D
+function GuiManager.AddGuiObjectDirect(O)
+	if not O.Parent then O.Parent = GuiRoot end
 end
 
 --#region parseStringToData
