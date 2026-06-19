@@ -1,10 +1,11 @@
 local POJ = require("Library.Prototypes.Hierach")
 
+---A prototype for any object which is to be rendered as a UI element.
 ---@class GUI2D: Hierach
 ---@field Prototype Hierach | GUI2D
----@field Position UDim2
----@field Size UDim2
----@field Rotation number 	The radians counterclockwise the GUI2D spins
+---@field Position UDim2				Where to render the element. Anchored at the center.
+---@field Size UDim2					How big the element should be.
+---@field Rotation number				The radians counterclockwise the GUI2D spins.
 local GUI2D = POJ:Inherit()
 GUI2D.Type = "GUI2D"
 GUI2D.Position = {xOffset = 0, yOffset = 0, xScale = 0, yScale = 0}

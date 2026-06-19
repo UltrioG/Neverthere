@@ -1,11 +1,12 @@
 local GUI2D = require("Library.Prototypes.Gui.GUI2D")
 
+---A visible rectangle on the screen.
 ---@class Rectangle: GUI2D
 ---@field Prototype Rectangle | GUI2D
----@field BackgroundColor color?
----@field BorderColor color?
----@field BackgroundAlpha percentage
----@field BorderAlpha percentage
+---@field BackgroundColor color?		The color of the rectangle.
+---@field BorderColor color?			The color of the border of the rectangle.
+---@field BackgroundAlpha percentage	How visible the rectangle is.
+---@field BorderAlpha percentage		How visible the border of the rectangle is.
 local Rectangle = GUI2D:Inherit()
 Rectangle.Type = "Rectangle"
 Rectangle.BackgroundColor = 0xFFFFFF
