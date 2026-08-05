@@ -1,12 +1,15 @@
 {
 	"Lua.workspace.library": [
-		"${addons}/lovr/module/library",
-		"${addons}/love-nuklear/module/library"
+		"${addons}/love-nuklear/module/library",
+		"${addons}/lovr/module/library"
 	],
 	"Lua.runtime.version": "LuaJIT",
 	"Lua.workspace.checkThirdParty": false,
 	"Lua.completion.autoRequire": false,
 	"Lua.diagnostics.disable": [
 		"lowercase-global"
+	],
+	"Lua.diagnostics.globals": [
+		"lovr"
 	]
 }
