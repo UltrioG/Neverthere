@@ -5,8 +5,7 @@ local BASIC = require "basic"
 local PRETTY = require "Library.Pretty"
 
 function lovr.load()
-	local O = JSON.parsePath("test.json")
-	PRETTY.print(O)
+
 end
 
 function lovr.draw(pass)
