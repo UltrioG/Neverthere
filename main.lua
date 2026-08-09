@@ -1,7 +1,6 @@
 require "Library.Globals"
 
-local GuiManager = require "GuiManager"
-local JSON = require "Library.json"
+local GuiManager = require "Library.GuiManager"
 local BASIC = require "basic"
 local PRETTY = require "Library.Pretty"
 

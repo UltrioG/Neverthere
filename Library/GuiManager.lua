@@ -8,8 +8,8 @@ local GUI_NAMES = {
 }
 ---@type {[GuiNames]: GUI2D}
 local GUI_OBJECTS = {}
-for filename in pairs(GUI_NAMES) do GUI_OBJECTS[filename] = require("Library.Prototypes.Gui."..filename) end
-local GUI2D = require("Library.Prototypes.Gui.GUI2D")
+for filename in pairs(GUI_NAMES) do GUI_OBJECTS[filename] = require("Prototypes.Gui."..filename) end
+local GUI2D = require("Prototypes.Gui.GUI2D")
 local GuiRoot = GUI2D:Clone()
 
 ---@param pass Pass
