@@ -1,8 +1,0 @@
-{
-	"Prototype": "GUI2D",
-	"Position": {
-		"xScale": 0.5,
-		"yScale": 0.5,
-		"yOffset": 200
-	}
-}
