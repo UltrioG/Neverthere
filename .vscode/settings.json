@@ -11,5 +11,6 @@
 	],
 	"Lua.diagnostics.globals": [
 		"lovr"
-	]
+	],
+	"Lua.hint.setType": true
 }
