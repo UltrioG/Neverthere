@@ -1,11 +1,22 @@
 ---@meta
 
-do	-- Math lib changes
+local uuid = require("uuid")
+uuid.set_rng(
+	function (n)
+		local toReturn = ""
+		for _ = 1, n do
+			toReturn = toReturn .. string.char(math.floor(lovr.math.random(0, 255)))
+		end
+		return toReturn
+	end
+)
+
+do -- Math lib changes
 	---Rounds a number.
 	---@param x number
 	---@return integer
-	math.round = function (x)
-		return math.floor(x) + math.floor(2*(x%1))
+	math.round = function(x)
+		return math.floor(x) + math.floor(2 * (x % 1))
 	end
 
 	---Linear Interpolation
@@ -14,97 +25,192 @@ do	-- Math lib changes
 	---@param b T
 	---@param t number
 	---@return T
-	math.lerp = function (a, b, t)
-		return (b-a)*t+a
+	math.lerp = function(a, b, t)
+		return (b - a) * t + a
 	end
 end
 
-do	-- String lib changes
+do -- String lib changes
 	---Gets the first character in a string
 	---@param s string
 	---@return string
-	string.first = function (s)
-		return s:sub(1,1)
+	string.first = function(s)
+		return s:sub(1, 1)
+	end
+	string.head = string.first
+
+	---Gets everything except the first character in a string
+	---@param s string
+	---@return string
+	string.rest = function (s)
+		return s:sub(2)
+	end
+	string.tail = string.rest
+
+	---Converts the first character of a string to uppercase.
+	---@param s string
+	---@return string
+	string.upperfirst = function(s)
+		return s:first():upper() .. s:rest()
 	end
 end
 
----Get a string indicating the current time.
----@return string
-function getNow()
-	return os.date("%Y%m%dT%H%M%S") --[[@as string]]
-end
-
----Get a string indicating the current time, but prettier.
----@return string
-function getNowPrettier()
-	return os.date("%Y-%m-%d %H:%M:%S") --[[@as string]]
-end
-
----Turns a series of arguments into a format for logging.
----Graciously stolen and adapted from https://stackoverflow.com/a/7153689
----@param severity severityLevel How severe this log mesage is
----@param tag "User" | string The origin of the message
----@param ... any The content of the message
----@return string
-function formatForLog(severity, tag, ...)
-	local S = ""
-	local write = function (s)
-		S = S .. s
+do -- Table lib changes
+	---Shallow clones a table
+	---@generic T: table
+	---@param T T
+	---@return T
+	table.clone = function (T)
+		local new = {}
+		for k,v in pairs(T) do new[k] = v end
+		return new
 	end
 
-	local n = select("#",...)
-    for i = 1,n do
-        local v = tostring(select(i,...))
-        write(v)
-        if i~=n then write'\t' end
-    end
-	
-	return ("[%s] [%s] [TAG %s] %s\n")
-		:format(getNowPrettier(), severity:upper(), tag, S)
+	---Creates a new table which is the union of all the given tables.
+	---Does not preserve order. For that,
+	---@see table.join
+	---@param ... table
+	---@return table
+	table.union = function (...)
+		local new = {}
+		for i = 1, select("#", ...) do
+			for k, v in pairs(select(i, ...)) do new[k] = v end
+		end
+		return new
+	end
+
+	---Joins the given lists.
+	---For tables which are not lists,
+	---@see table.union
+	---@param ... any[]
+	---@return table
+	table.join = function (...)
+		local new = {}
+		for i = 1, select("#", ...) do
+			for _, v in ipairs(select(i, ...)) do table.insert(new, v) end
+		end
+		return new
+	end
+
+	---Reverses a list.
+	---@param T any[]
+	---@return table
+	table.reverse = function (T)
+		local new = {}
+		for i = #T, 1, -1 do new[#T-i+1] = T[i] end
+		return new
+	end
+
+	---Converts a list to a Set.
+	---@generic T
+	---@param T T[]
+	---@return Set<T>
+	table.toSet = function (T)
+		local set = {}
+		for _, thing in ipairs(T) do
+			set[thing] = true
+		end
+		return set
+	end
+
+	---Returns a new table with keys and values swapped
+	---@generic K
+	---@generic V
+	---@param T {[K]: V}
+	---@return {[V]: K}
+	table.swapKV = function (T)
+		local new = {}
+		for k, v in pairs(T) do new[v] = k end
+		return new
+	end
 end
 
----Writes a message to the log.
----It is preferred to use `print` as it has been replaced to write to both console and log.
----@param ... any
-function log(...)
-	if not LOG then return end
-	local result = formatForLog("info", "User", ...)
+do -- Uncategorized Changes
+	---Get a string indicating the current time.
+	---@return string
+	function getNow()
+		return os.date("%Y%m%dT%H%M%S") --[[@as string]]
+	end
 
-	LOG:write(result)
-	LOG:flush()
-end
+	---Get a string indicating the current time, but prettier.
+	---@return string
+	function getNowPrettier()
+		return os.date("%Y-%m-%d %H:%M:%S") --[[@as string]]
+	end
 
-local cprint = print
----Custom implementation which works with logging.<br>
----Prints with the usual `print` function and also writes it to the log.
----@param ... any
-function print(...)
-	log(...)
-	cprint(...)
-end
+	---Turns a series of arguments into a format for logging.
+	---Graciously stolen and adapted from https://stackoverflow.com/a/7153689
+	---@param severity severityLevel How severe this log mesage is
+	---@param tag "User" | string The origin of the message
+	---@param ... any The content of the message
+	---@return string
+	function formatForLog(severity, tag, ...)
+		local S = ""
+		local write = function(s)
+			S = S .. s
+		end
 
----Writes an error to the log.
----Does not trigger program shutdown, but is used when program shuts down.
----@param ... any
-function errLog(...)
-	local result = formatForLog("error", "User", ...)
+		local n = select("#", ...)
+		for i = 1, n do
+			local v = tostring(select(i, ...))
+			write(v)
+			if i ~= n then write '\t' end
+		end
 
-	LOG:write(result)
-	LOG:flush()
-end
+		return ("[%s] [%s] [TAG %s] %s\n")
+			:format(getNowPrettier(), severity:upper(), tag, S)
+	end
 
----Prints with a warning tag.
----@param ... any
-function warn(...)
-	cprint("WARNING:", ...)
-	if not LOG then return end
-	local result = formatForLog("warn", "User", ...)
+	---Writes a message to the log.
+	---It is preferred to use `print` as it has been replaced to write to both console and log.
+	---@param ... any
+	function log(...)
+		if not LOG then return end
+		local result = formatForLog("info", "User", ...)
 
-	LOG:write(result)
-	LOG:flush()
+		LOG:write(result)
+		LOG:flush()
+	end
+
+	local cprint = print
+	---Custom implementation which works with logging.<br>
+	---Prints with the usual `print` function and also writes it to the log.
+	---@param ... any
+	function print(...)
+		log(...)
+		cprint(...)
+	end
+
+	---Writes an error to the log.
+	---Does not trigger program shutdown, but is used when program shuts down.
+	---@param ... any
+	function errLog(...)
+		local result = formatForLog("error", "User", ...)
+
+		LOG:write(result)
+		LOG:flush()
+	end
+
+	---Prints with a warning tag.
+	---@param ... any
+	function warn(...)
+		cprint("WARNING:", ...)
+		if not LOG then return end
+		local result = formatForLog("warn", "User", ...)
+
+		LOG:write(result)
+		LOG:flush()
+	end
+
+	---Function which does nothing.
+	function void()
+		
+	end
 end
 
 LOG, errmsg = io.open("./logs/latest.log", "w")
-if not LOG then error("Cannot create log file with error "..tostring(errmsg)) else
+if not LOG then
+	error("Cannot create log file with error " .. tostring(errmsg))
+else
 	print("Log initialized.")
 end

@@ -1,17 +1,29 @@
-require "Library.Globals"
+lovr.filesystem.setRequirePath(
+	table.concat(
+		{
+			"lua_modules/share/lua/5.4/?.lua",
+			"lua_modules/share/lua/5.4/?/init.lua",
+			"src/?.lua",
+			"src/object/?.lua"
+		}, ';'
+	)
+)
+require "Globals"
 
-local GuiManager = require "Library.GuiManager"
 local BASIC = require "basic"
-local PRETTY = require "Library.Pretty"
+local PRETTY = require "Pretty"
+
+local gui = require("Gui"):Clone()
+gui.Name = "Miku"
 
 function lovr.load()
-
+	gui.Visible = true
 end
 
 function lovr.draw(pass)
 	BASIC.plane(pass)
 
-	GuiManager.Render2D(pass)
+	gui:DrawLineage(pass)
 
 	return false
 end
