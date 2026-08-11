@@ -123,6 +123,14 @@ do -- Table lib changes
 		for k, v in pairs(T) do new[v] = k end
 		return new
 	end
+
+	---Get the last element of a list.
+	---@generic T
+	---@param T T[]
+	---@return T
+	table.last = function (T)
+		return T[#T]
+	end
 end
 
 do -- Uncategorized Changes
