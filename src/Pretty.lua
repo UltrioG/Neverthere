@@ -27,8 +27,12 @@ function PRETTY.parse(x)
 			PRETTY.parse(v)
 		) .. ','
 	end
-	s = s:sub(1,-2):gsub("\n", "\n\t")
-	s = s .. "\n}"
+	if s:sub(-1, -1) ~= '{' then
+		s = s:sub(1,-2):gsub("\n", "\n\t")
+		s = s .. "\n}"
+	else
+		s = s .. '}'
+	end
 	return s
 end
 
