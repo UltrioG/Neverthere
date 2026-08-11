@@ -2,25 +2,32 @@
 ---@class Gui: Hierarch
 ---@field Position UDim2
 ---@field Size UDim2
----@field private __position UDim2
----@field private __size UDim2
 ---@field Visible boolean
 ---@field x integer The absolute X-Coordinate of the center of the Gui
 ---@field y integer The absolute Y-Coordinate of the center of the Gui
 ---@field width integer The absolute width of the Gui
 ---@field height integer The absolute height of the Gui
 ---@field dimensions {x: integer, y: integer, w: integer, h: integer} A nicely-packed up version of x, y, width and height.
-local Gui = require("src.object.Hierarch"):clone()
-Gui.__position = {
-	xScale = 0.5,
-	yScale = 0.5
-}
-Gui.__size = {
-	xOffset = 100,
-	yOffset = 100
-}
+---@field Pivot pivot
+---@field private __position UDim2
+---@field private __size UDim2
+---@field private __pivot pivot
+local Gui = require("Hierarch"):clone()
 Gui.Visible = false
 Gui.__type = "Gui"
+Gui.__position = {xScale = 0.5, yScale = 0.5}
+Gui.__size = {xOffset = 100, yOffset = 100}
+Gui.__pivot = {x = 0.5, y = 0.5}
+Gui:constructor(Gui)
+
+function Gui:constructor(new)
+	---@diagnostic disable
+	self.__proto:constructor(new)
+	new.Position = self.Position
+	new.Size = self.Size
+	new.Pivot = self.Pivot
+	---@diagnostic enable
+end
 
 ---Get the size, in pixels, of this Gui.
 ---@param self Gui
@@ -53,9 +60,10 @@ function Gui:GetAbsolutePosition()
 	else
 		parentW, parentH = lovr.system.getWindowDimensions()
 	end
-	return
-		math.round(parentW * (self.Position.xScale or 0) + (self.Position.xOffset or 0)),
-		math.round(parentH * (self.Position.yScale or 0) + (self.Position.yOffset or 0))
+	local width, height = self:GetAbsoluteSize()
+	local x = parentW * (self.Position.xScale or 0) + (self.Position.xOffset or 0) + math.lerp(-width/2, width/2, self.Pivot.x)
+	local y = parentH * (self.Position.yScale or 0) + (self.Position.yOffset or 0) + math.lerp(-height/2, height/2, self.Pivot.y)
+	return math.round(x), math.round(y)
 end
 
 ---@diagnostic disable
@@ -98,10 +106,10 @@ end
 function Gui.__setters:Position(pos)
 	---@type UDim2
 	local newPos = {
-		xScale = pos.xScale,
-		xOffset = pos.xOffset,
-		yScale = pos.yScale,
-		yOffset = pos.yOffset
+		xScale = pos.xScale or 0,
+		xOffset = pos.xOffset or 0,
+		yScale = pos.yScale or 0,
+		yOffset = pos.yOffset or 0
 	}
 	self.__position = newPos	---@diagnostic disable-line
 end
@@ -119,12 +127,12 @@ end
 function Gui.__setters:Size(size)
 	---@type UDim2
 	local newSize = {
-		xScale = size.xScale,
-		xOffset = size.xOffset,
-		yScale = size.yScale,
-		yOffset = size.yOffset
+		xScale = size.xScale or 0,
+		xOffset = size.xOffset or 0,
+		yScale = size.yScale or 0,
+		yOffset = size.yOffset or 0
 	}
-	self.__size = newSize		---@diagnostic disable-line
+	self.__size = newSize	---@diagnostic disable-line
 end
 
 ---Gets the size, in UDim2, of this Gui
@@ -132,6 +140,18 @@ end
 ---@return UDim2 Size
 function Gui.__getters:Size()
 	return table.clone(self.__size)	---@diagnostic disable-line
+end
+
+function Gui.__setters:Pivot(v)
+	assert(v.x, "No x value set for pivot!")
+	assert(v.y, "No y value set for pivot!")
+	self.__pivot = {---@diagnostic disable-line
+		x=v.x,
+		y=v.y
+	}
+end
+function Gui.__getters:Pivot()
+	return table.clone(self.__pivot)	---@diagnostic disable-line
 end
 
 ---Draws this Gui, and all its children, to this pass.
@@ -153,7 +173,8 @@ function Gui:DrawSelf(pass)
 	if not self.Visible then return end
 	local x, y, w, h = self:GetAbsoluteDimensionTuple()
 	pass:setColor(0xff0000, 1)
-	pass:box(x, y, 0, w, h, 0, 0, 0, 0, 0, "line")
+	pass:box(x, y, 0, w, h, 0, 0, 0, 0, 0, "line")	-- Box
+	pass:box(x, y, 0, 8, 8, 0, 0, 0, 0, 0, "fill")	-- Pivot
 	local font = lovr.graphics.getDefaultFont()
 	local text = tostring(self)
 	local width, height = font:getWidth(text), font:getHeight()
@@ -166,7 +187,7 @@ function Gui:DrawSelf(pass)
 		math.floor(height/2),
 		0, 0, 0, 0, 0,
 		"fill"
-)
+	)
 	pass:setColor(0xff0000, 1)
 	pass:text(text, math.round(x - w/2), math.round(y - h/2), 1, 0.5, 0, 0, 0, 0, 0, "left", "bottom")
 end

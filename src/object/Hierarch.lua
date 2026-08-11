@@ -2,20 +2,21 @@ local THINGY = require("Thingy")
 
 ---A Thingy with a lineage.
 ---@class Hierarch: Thingy
----@field private __parent Hierarch The internal parent of this Hierarch.
----@field private __children Hierarch[] The internal children of this Hierarch
 ---@field private __class string The "class" of this Hierarch
 ---@field Name string A name to identify this Hierarch.
 ---@field Parent Hierarch The parent of this Hierarch
 ---@field Children Hierarch[] The children of this Hierarch.
 ---@field Descendants Hierarch[] The descendants of this Hierarch.
+---@field private __children Hierarch[]
+---@field private __parent Hierarch
 local Hierarch = THINGY:clone()
 Hierarch.__children = {}
 Hierarch.__type = "Hierarch"
 
-function Hierarch:constructor()
+function Hierarch:constructor(new)
+	self.__proto:constructor(new)
 	---@diagnostic disable-next-line
-	self.__children = table.clone(self.__proto.__children or {})
+	new.Children = self.__proto.Children or {}
 end
 
 ---Gets (a copy of) the Hierarch's children list
@@ -51,7 +52,7 @@ end
 ---@param p Hierarch
 function Hierarch.__setters:setParent(p)
 	---@diagnostic disable
-	if self.__parent then self.__parent[self] = nil end
+	if self.Parent then self.Parent[self] = nil end
 	self.__parent = p
 	table.insert(p.__children, self)
 	---@diagnostic enable

@@ -9,6 +9,7 @@
 ---@alias predicate<T> fun(T): boolean
 ---@alias dynamic<T> fun(): T
 ---@alias uuid string
+---@alias pivot {x: number, y: number}
 
 ---@class UDim2
 ---@field xScale number?
