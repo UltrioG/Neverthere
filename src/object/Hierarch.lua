@@ -74,7 +74,11 @@ function Hierarch:Clone()
 end
 
 function Hierarch.__getters:Name()
-	if rawget(self, "Name") then return tostring(rawget(self, "Name")) else return self.__name or self.__type or ":(" end
+	return self.__name
+end
+
+function Hierarch.__setters:Name(v)
+	self.__name = v
 end
 
 return Hierarch
