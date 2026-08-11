@@ -2,7 +2,6 @@ local THINGY = require("Thingy")
 
 ---A Thingy with a lineage.
 ---@class Hierarch: Thingy
----@field private __class string The "class" of this Hierarch
 ---@field Name string A name to identify this Hierarch.
 ---@field Parent Hierarch The parent of this Hierarch
 ---@field Children Hierarch[] The children of this Hierarch.
