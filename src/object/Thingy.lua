@@ -1,10 +1,12 @@
 local UUID = require("uuid")
 
-local BYPASS_GETTERS = {}
-local BYPASS_SETTERS = {
+local BYPASS_GETTERS = table.toSet({
+	
+})
+local BYPASS_SETTERS = table.toSet({
 	"__name",
 	"__type"
-}
+})
 
 ---Prototype inheritance object
 ---@class Thingy
@@ -13,7 +15,7 @@ local BYPASS_SETTERS = {
 ---@field __uuid uuid A unique uuid for the Thingy
 ---@field __type string? An optional string field for typechecking and tostrings
 ---@field __name string? An optional string field for description and tostrings
----@field constructor nil | fun(self: Thingy): nil A function called on the new object when `clone` is called
+---@field constructor nil | fun(self: Thingy, new: Thingy): nil A function called on the new object when `clone` is called
 ---@field __getters dictionary<fun(self: Thingy): any> A dictionary of getters
 ---@field __setters dictionary<fun(self: Thingy, value: any): nil> A dictionary of setters
 ---@field __protoChain Thingy[] A prototype chain from this Thingy to the root Thingy
@@ -22,7 +24,9 @@ local BYPASS_SETTERS = {
 ---@field __allInherentProperties table
 local Thingy = {
 	__proto = nil,
-	__props = {},
+	__props = {
+		constructor = void
+	},
 	__uuid = UUID.v4(),
 	__getters = {},
 	__setters = {}
@@ -36,7 +40,7 @@ Thingy.__name = "ProtoThingy"
 ---@return any
 function THINGY_META.__index(self, k)
 	local getters = rawget(self, "__getters")
-	if getters and type(getters[k]) == "function" then return getters[k](self) end
+	if getters and type(getters[k]) == "function" and not BYPASS_GETTERS[k] then return getters[k](self) end
 	local props = rawget(self, "__props")
 	assert(props, "Critical Error: Thingy has no prop")
 	return props[k]
@@ -46,8 +50,7 @@ end
 ---@param k any
 ---@param v any
 function THINGY_META.__newindex(self, k, v)
-	if table.toSet(BYPASS_SETTERS)[k] then rawset(self, k, v) return end
-	if type(self.__setters[k]) == "function" then self.__setters[k](self, v) return end
+	if type(self.__setters[k]) == "function" and not BYPASS_SETTERS[k] then self.__setters[k](self, v) return end
 	---@diagnostic disable-next-line
 	self.__props[k] = v
 end
@@ -118,7 +121,7 @@ function Thingy:clone()
 		__setters = setmetatable({}, {__index = self.__setters})
 	}
 	setmetatable(new, THINGY_META)
-	if type(new.constructor) == "function" then new.constructor(new) end
+	if type(new.constructor) == "function" then new:constructor(new) end
 	return new
 end
 
