@@ -12,23 +12,28 @@ require "Globals"
 
 local BASIC = require "basic"
 local PRETTY = require "Pretty"
-local THINGY = require("Thingy")
+local GUI = require("Gui")
 
 function lovr.load()
+	
+end
 
-	local originalErrhand = lovr.errhand
-	function lovr.errhand(message)
-		if LOG then errLog(message) end
-		return originalErrhand(message)
-	end
+local function set2D(pass)
+	local font = lovr.graphics.getDefaultFont()
+	font:setPixelDensity(1)
 
-	local thingy = THINGY:clone()
-	thingy.__name = "new"
+	local width, height = lovr.system.getWindowDimensions()
+	local projection = Mat4():orthographic(0, width, 0, height, -10, 10)
+	pass:setViewPose(1, mat4():identity(), false)
+	pass:setProjection(1, projection)
+	pass:setDepthTest()
 end
 
 function lovr.draw(pass)
 	BASIC.plane(pass)
-
+	
+	set2D(pass)
+	
 	return false
 end
 
@@ -45,6 +50,17 @@ local function logExit()
 	timedLog:close()
 	LOG:close()
 	return false
+end
+
+--TODO: Figure out why ts ain't workin
+local originalErrhand = lovr.errhand
+function lovr.errhand(message)
+	if LOG then errLog(message) end
+	local success, result = pcall(function ()
+		return originalErrhand(message)
+	end)
+	if success then return result end
+	return -1
 end
 
 function lovr.quit()
