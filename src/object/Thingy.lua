@@ -14,10 +14,12 @@ local BYPASS_SETTERS = {
 ---@field __type string? An optional string field for typechecking and tostrings
 ---@field __name string? An optional string field for description and tostrings
 ---@field constructor nil | fun(self: Thingy): nil A function called on the new object when `clone` is called
----@field __getters dictionary<fun(self: Thingy, key: any): any> A dictionary of getters
----@field __setters dictionary<fun(self: Thingy, key: any, value: any): nil> A dictionary of setters
+---@field __getters dictionary<fun(self: Thingy): any> A dictionary of getters
+---@field __setters dictionary<fun(self: Thingy, value: any): nil> A dictionary of setters
 ---@field __protoChain Thingy[] A prototype chain from this Thingy to the root Thingy
----@field __allProperties table All properties of this Thingy, including inherited properties
+---@field __allGettableProperties table
+---@field __allSettableProperties table
+---@field __allInherentProperties table
 local Thingy = {
 	__proto = nil,
 	__props = {},
@@ -96,7 +98,7 @@ end
 ---@param self table
 function THINGY_META.__pairs(self)
 	if type(self.__pairs) == "function" then return self.__pairs(self) end
-	return pairs(self.__allProperties)
+	return pairs(self.__allGettableProperties)
 end
 
 setmetatable(Thingy, THINGY_META)
@@ -153,15 +155,55 @@ function Thingy.__getters.__protoChain(self)
 	return thingyChain
 end
 
----Gets all properties of this thingy, including inherited ones
+---Gets all properties of this thingy, including inherited ones, but excluding getters and setters
 ---@param self Thingy
 ---@return table
-function Thingy.__getters.__allProperties(self)
+function Thingy.__getters.__allInherentProperties(self)
 	local protoChain = self.__protoChain
 	local props = {}
 	for _, thingy in ipairs(table.reverse(protoChain)) do
 		for k, v in pairs(thingy.__props) do
 			props[k] = v
+		end
+	end
+	return props
+end
+
+---Get all properties which can be gotten, including from getters and inheritance.
+---@param self Thingy
+---@return table
+function Thingy.__getters.__allGettableProperties(self)
+	local protoChain = self.__protoChain
+	local props = {}
+	for _, thingy in ipairs(table.reverse(protoChain)) do
+		---@type Thingy
+		local thingy = thingy
+		---@diagnostic disable-next-line
+		for k, v in pairs(thingy.__props) do
+			props[k] = v
+		end
+		for k, v in pairs(thingy.__getters) do
+			props[k] = "getter"
+		end
+	end
+	return props
+end
+
+---Get all properties which can be set, including from getters and inheritance.
+---@param self Thingy
+---@return table
+function Thingy.__getters.__allSettableProperties(self)
+	local protoChain = self.__protoChain
+	local props = {}
+	for _, thingy in ipairs(table.reverse(protoChain)) do
+		---@type Thingy
+		local thingy = thingy
+		---@diagnostic disable-next-line
+		for k, v in pairs(thingy.__props) do
+			props[k] = v
+		end
+		for k, v in pairs(thingy.__setters) do
+			props[k] = "setter"
 		end
 	end
 	return props
