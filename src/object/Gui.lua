@@ -154,7 +154,21 @@ function Gui:DrawSelf(pass)
 	local x, y, w, h = self:GetAbsoluteDimensionTuple()
 	pass:setColor(0xff0000, 1)
 	pass:box(x, y, 0, w, h, 0, 0, 0, 0, 0, "line")
-	pass:text(self.Name, math.round(x - w/2), math.round(y - h/2), 1, 0.5, 0, 0, 0, 0, 0, "left", "bottom")
+	local font = lovr.graphics.getDefaultFont()
+	local text = tostring(self)
+	local width, height = font:getWidth(text), font:getHeight()
+	pass:setColor(0, 1)
+	pass:box(
+		math.round(x - w/2 + width/4),
+		math.round(y - h/2 - height/4),
+		0,
+		math.floor(width/2)+ 8,
+		math.floor(height/2),
+		0, 0, 0, 0, 0,
+		"fill"
+)
+	pass:setColor(0xff0000, 1)
+	pass:text(text, math.round(x - w/2), math.round(y - h/2), 1, 0.5, 0, 0, 0, 0, 0, "left", "bottom")
 end
 
 return Gui
