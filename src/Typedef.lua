@@ -22,3 +22,5 @@ UDim2 = {}
 ---@alias stack<T> [T]
 ---@alias dictionary<T> {[string]: T}
 ---@alias Set<T> {[T]: true}
+
+---@alias monad<T, U> T|U|{__interior: T}

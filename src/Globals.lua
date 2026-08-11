@@ -56,6 +56,23 @@ do -- String lib changes
 end
 
 do -- Table lib changes
+	---Creates a monad from a table.<br>
+	---A monad is a monoid in the category of endofunctors.
+	---@generic T: table
+	---@param T T
+	---@return monad<T, tablelib> Monad A monoid in the category of endofunctors
+	table.toMonad = function (T)
+		return setmetatable({
+			__interior = T
+		}, {
+			__index = function (T, k)
+				if T.__interior[k] then return T.__interior[k] end
+				if table[k] then return table[k] end
+			end,
+			__newindex = T
+		})
+	end
+
 	---Shallow clones a table
 	---@generic T: table
 	---@param T T
@@ -135,7 +152,7 @@ do -- Table lib changes
 	---Runs a function for each element of the table, creating a new one in the process.
 	---@generic K, V
 	---@param T table
-	---@param transformation fun(keys: K, value: V): K, V
+	---@param transformation fun(key: K, value: V): K, V
 	table.map = function (T, transformation)
 		local new = {}
 		for k, v in pairs(T) do
