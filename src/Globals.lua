@@ -151,7 +151,7 @@ do -- Table lib changes
 
 	---Runs a function for each element of the table, creating a new one in the process.
 	---@generic K, V
-	---@param T table
+	---@param T {[K]: V}
 	---@param transformation fun(key: K, value: V): K, V
 	table.map = function (T, transformation)
 		local new = {}
