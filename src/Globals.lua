@@ -215,6 +215,16 @@ do -- Uncategorized Changes
 	function void()
 		
 	end
+
+	-- Fix weird bug with pairs not respecting metamethods
+	local raw_pairs = pairs
+	function pairs(T)
+		local meta = getmetatable(T)
+		if meta and meta.__pairs then
+			return meta.__pairs(T)
+		end
+		return raw_pairs(T)
+	end
 end
 
 LOG, errmsg = io.open("./logs/latest.log", "w")
