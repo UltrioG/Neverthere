@@ -131,6 +131,19 @@ do -- Table lib changes
 	table.last = function (T)
 		return T[#T]
 	end
+
+	---Runs a function for each element of the table, creating a new one in the process.
+	---@generic K, V
+	---@param T table
+	---@param transformation fun(keys: K, value: V): K, V
+	table.map = function (T, transformation)
+		local new = {}
+		for k, v in pairs(T) do
+			local mk, mv = transformation(k, v)
+			new[mk] = mv
+		end
+		return new
+	end
 end
 
 do -- Uncategorized Changes
