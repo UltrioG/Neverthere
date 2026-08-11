@@ -174,8 +174,9 @@ do -- Uncategorized Changes
 	---@param ... any
 	function log(...)
 		if not LOG then return end
-		local result = formatForLog("info", "User", ...)
 
+		local result = formatForLog("info", "User", ...)
+		
 		LOG:write(result)
 		LOG:flush()
 	end

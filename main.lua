@@ -6,24 +6,28 @@ lovr.filesystem.setRequirePath(
 			"src/?.lua",
 			"src/object/?.lua"
 		}, ';'
-	)
+	)..';'..lovr.filesystem.getRequirePath()
 )
 require "Globals"
 
 local BASIC = require "basic"
 local PRETTY = require "Pretty"
-
-local gui = require("Gui"):Clone()
-gui.Name = "Miku"
+local THINGY = require("Thingy")
 
 function lovr.load()
-	gui.Visible = true
+
+	local originalErrhand = lovr.errhand
+	function lovr.errhand(message)
+		if LOG then errLog(message) end
+		return originalErrhand(message)
+	end
+
+	local thingy = THINGY:clone()
+	thingy.__name = "new"
 end
 
 function lovr.draw(pass)
 	BASIC.plane(pass)
-
-	gui:DrawLineage(pass)
 
 	return false
 end
@@ -45,10 +49,4 @@ end
 
 function lovr.quit()
 	return logExit()
-end
-
-local originalErrhand = lovr.errhand
-function lovr.errhand(message)
-	if LOG then errLog(message) end
-	return originalErrhand(message)
 end
