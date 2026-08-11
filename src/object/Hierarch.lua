@@ -28,6 +28,7 @@ end
 
 ---Gets a list of the Hierarch's descendants.
 ---Traversal is in level order.
+---@param self Hierarch
 ---@return [Hierarch] descendants
 function Hierarch.__getters:Descendants()
 	local desc = self.Children
