@@ -11,13 +11,12 @@
 ---@field Pivot pivot
 ---@field private __position UDim2
 ---@field private __size UDim2
----@field private __pivot pivot
 local Gui = require("Hierarch"):clone()
 Gui.Visible = false
 Gui.__type = "Gui"
-Gui.__position = {xScale = 0.5, yScale = 0.5}
-Gui.__size = {xOffset = 100, yOffset = 100}
-Gui.__pivot = {x = 0.5, y = 0.5}
+Gui.__position = UDim2.new(.5,0,.5,0)
+Gui.__size = UDim2.new(0,100,0,100)
+Gui.Pivot = vector(0.5, 0.5)
 Gui:constructor(Gui)
 
 function Gui:constructor(new)
@@ -25,7 +24,6 @@ function Gui:constructor(new)
 	self.__proto:constructor(new)
 	new.Position = self.Position
 	new.Size = self.Size
-	new.Pivot = self.Pivot
 	---@diagnostic enable
 end
 
@@ -60,10 +58,17 @@ function Gui:GetAbsolutePosition()
 	else
 		parentW, parentH = lovr.system.getWindowDimensions()
 	end
-	local width, height = self:GetAbsoluteSize()
-	local x = parentW * (self.Position.xScale or 0) + (self.Position.xOffset or 0) + math.lerp(-width/2, width/2, self.Pivot.x)
-	local y = parentH * (self.Position.yScale or 0) + (self.Position.yOffset or 0) + math.lerp(-height/2, height/2, self.Pivot.y)
+	local x = parentW * (self.Position.xScale or 0) + (self.Position.xOffset or 0)
+	local y = parentH * (self.Position.yScale or 0) + (self.Position.yOffset or 0)
 	return math.round(x), math.round(y)
+end
+
+---Get the coordinate such that if the middle of the Gui were there, the pivot would be at `Pivot`
+---@return integer x
+---@return integer y
+function Gui:GetPivotedPosition()
+	local x, y, w, h = self:GetAbsoluteDimensionTuple()
+	return math.round(x - math.lerp(-w/2,w/2,self.Pivot.x)),math.round(y - math.lerp(-h/2,h/2,self.Pivot.y))
 end
 
 ---@diagnostic disable
@@ -95,7 +100,7 @@ end
 ---@return integer w
 ---@return integer h
 function Gui:GetAbsoluteDimensionTuple()
-	local dims = Gui.dimensions
+	local dims = self.dimensions
 	return dims.x, dims.y, dims.w, dims.h
 end
 ---@diagnostic enable
@@ -105,12 +110,7 @@ end
 ---@param pos UDim2
 function Gui.__setters:Position(pos)
 	---@type UDim2
-	local newPos = {
-		xScale = pos.xScale or 0,
-		xOffset = pos.xOffset or 0,
-		yScale = pos.yScale or 0,
-		yOffset = pos.yOffset or 0
-	}
+	local newPos = pos
 	self.__position = newPos	---@diagnostic disable-line
 end
 
@@ -118,40 +118,21 @@ end
 ---@param self Gui
 ---@return UDim2 Position
 function Gui.__getters:Position()
-	return table.clone(self.__position)	---@diagnostic disable-line
+	return self.__position	---@diagnostic disable-line
 end
 
 ---Sets the size, in UDim2, of this Gui
 ---@param self Gui
 ---@param size UDim2
 function Gui.__setters:Size(size)
-	---@type UDim2
-	local newSize = {
-		xScale = size.xScale or 0,
-		xOffset = size.xOffset or 0,
-		yScale = size.yScale or 0,
-		yOffset = size.yOffset or 0
-	}
-	self.__size = newSize	---@diagnostic disable-line
+	self.__size = size	---@diagnostic disable-line
 end
 
 ---Gets the size, in UDim2, of this Gui
 ---@param self Gui
 ---@return UDim2 Size
 function Gui.__getters:Size()
-	return table.clone(self.__size)	---@diagnostic disable-line
-end
-
-function Gui.__setters:Pivot(v)
-	assert(v.x, "No x value set for pivot!")
-	assert(v.y, "No y value set for pivot!")
-	self.__pivot = {---@diagnostic disable-line
-		x=v.x,
-		y=v.y
-	}
-end
-function Gui.__getters:Pivot()
-	return table.clone(self.__pivot)	---@diagnostic disable-line
+	return self.__size	---@diagnostic disable-line
 end
 
 ---Draws this Gui, and all its children, to this pass.
@@ -172,16 +153,17 @@ end
 function Gui:DrawSelf(pass)
 	if not self.Visible then return end
 	local x, y, w, h = self:GetAbsoluteDimensionTuple()
+	local px, py = self:GetPivotedPosition()
 	pass:setColor(0xff0000, 1)
-	pass:box(x, y, 0, w, h, 0, 0, 0, 0, 0, "line")	-- Box
+	pass:box(px, py, 0, w, h, 0, 0, 0, 0, 0, "line")	-- Box
 	pass:box(x, y, 0, 8, 8, 0, 0, 0, 0, 0, "fill")	-- Pivot
 	local font = lovr.graphics.getDefaultFont()
 	local text = tostring(self)
 	local width, height = font:getWidth(text), font:getHeight()
 	pass:setColor(0, 1)
 	pass:box(
-		math.round(x - w/2 + width/4),
-		math.round(y - h/2 - height/4),
+		math.round(px - w/2 + width/4),
+		math.round(py - h/2 - height/4),
 		0,
 		math.floor(width/2)+ 8,
 		math.floor(height/2),
@@ -189,7 +171,7 @@ function Gui:DrawSelf(pass)
 		"fill"
 	)
 	pass:setColor(0xff0000, 1)
-	pass:text(text, math.round(x - w/2), math.round(y - h/2), 1, 0.5, 0, 0, 0, 0, 0, "left", "bottom")
+	pass:text(text, math.round(px - w/2), math.round(py - h/2), 1, 0.5, 0, 0, 0, 0, 0, "left", "bottom")
 end
 
 return Gui
