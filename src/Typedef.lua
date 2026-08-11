@@ -4,19 +4,12 @@
 ---@alias color number 		Preferably Hex Color
 ---@alias percentage number from 0 to 1
 ---@alias severityLevel "debug" | "info" | "warn" | "error"
----@alias numeric number|Vec2|Vec3|Vec4|Mat4
+---@alias numeric number|vector|Mat4
 ---@alias consumer<T> fun(T): nil
 ---@alias predicate<T> fun(T): boolean
 ---@alias dynamic<T> fun(): T
 ---@alias uuid string
----@alias pivot {x: number, y: number}
-
----@class UDim2
----@field xScale number?
----@field yScale number?
----@field xOffset integer?
----@field yOffset integer?
-UDim2 = {}
+---@alias pivot vector
 
 -- These are for clarity
 ---@alias queue<T> [T]

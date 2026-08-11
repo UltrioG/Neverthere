@@ -272,6 +272,20 @@ do -- Uncategorized Changes
 	end
 end
 
+do	-- Globalization
+	local protoudim2 = require("UDim2")
+	UDim2 = {}
+	function UDim2.new(xScale, xOffset, yScale, yOffset)
+		local new = protoudim2:clone()
+		new.xScale = xScale
+		new.xOffset = xOffset
+		new.yScale = yScale
+		new.yOffset = yOffset
+		new:freeze()
+		return new
+	end
+end
+
 LOG, errmsg = io.open("./logs/latest.log", "w")
 if not LOG then
 	error("Cannot create log file with error " .. tostring(errmsg))
