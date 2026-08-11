@@ -1,0 +1,80 @@
+local THINGY = require("Thingy")
+
+---A Thingy with a lineage.
+---@class Hierarch: Thingy
+---@field private __parent Hierarch The internal parent of this Hierarch.
+---@field private __children Hierarch[] The internal children of this Hierarch
+---@field private __class string The "class" of this Hierarch
+---@field Name string A name to identify this Hierarch.
+---@field Parent Hierarch The parent of this Hierarch
+---@field Children Hierarch[] The children of this Hierarch.
+---@field Descendants Hierarch[] The descendants of this Hierarch.
+local Hierarch = THINGY:clone()
+Hierarch.__children = {}
+Hierarch.__type = "Hierarch"
+
+function Hierarch:constructor()
+	---@diagnostic disable-next-line
+	self.__children = table.clone(self.__proto.__children or {})
+end
+
+---Gets (a copy of) the Hierarch's children list
+---@return [Hierarch] children
+function Hierarch.__getters:Children()
+	local list = {}
+	for child in pairs(self.__children) do table.insert(list, child) end
+	return list
+end
+
+---Gets a list of the Hierarch's descendants.
+---Traversal is in level order.
+---@return [Hierarch] descendants
+function Hierarch.__getters:Descendants()
+	local desc = self.Children
+	local i = 1
+	repeat
+		local child = desc[i]
+		if child == nil then break end
+		for _, grandchild in ipairs(child.Children) do table.insert(desc, grandchild) end
+		i = i + 1
+	until desc[i] == nil
+	return desc
+end
+
+function Hierarch.__getters:getParent()
+	return self.__parent
+end
+
+---Sets the Parent of this Hierarch.
+---@param self Hierarch
+---@param p Hierarch
+function Hierarch.__setters:setParent(p)
+	---@diagnostic disable
+	if self.__parent then self.__parent[self] = nil end
+	self.__parent = p
+	table.insert(p.__children, self)
+	---@diagnostic enable
+end
+
+---Creates a new Hierarch with the same properties as this one.
+---@generic T: Hierarch
+---@param self T
+---@return T
+function Hierarch:Clone()
+	---@type Hierarch
+	local self = self
+	local new = self:clone()
+	new.__proto = self.__proto
+	new.__children = {}
+	for _, child in ipairs(self.Children) do
+		local childClone = child:Clone()
+		childClone.Parent = new
+	end
+	return new
+end
+
+function Hierarch.__getters:Name()
+	if rawget(self, "Name") then return tostring(rawget(self, "Name")) else return self.__name or self.__type or ":(" end
+end
+
+return Hierarch
