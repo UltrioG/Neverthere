@@ -161,6 +161,16 @@ do -- Table lib changes
 		end
 		return new
 	end
+
+	---Get the keys of a table as a list
+	---@generic K
+	---@param T {[K]: any}
+	---@return K[]
+	table.keys = function (T)
+		local new = {}
+		for k in pairs(T) do table.insert(new, k) end
+		return new
+	end
 end
 
 do -- Uncategorized Changes
