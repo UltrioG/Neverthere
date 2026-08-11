@@ -2,7 +2,8 @@ local UUID = require("uuid")
 
 local BYPASS_GETTERS = {}
 local BYPASS_SETTERS = {
-	"__name"
+	"__name",
+	"__type"
 }
 
 ---Prototype inheritance object
@@ -26,73 +27,6 @@ local Thingy = {
 }
 local THINGY_META = {}
 Thingy.__name = "ProtoThingy"
-setmetatable(Thingy, THINGY_META)
-
----Creates a clone of this Thingy.
----@generic T:Thingy
----@param self T
----@return T new The new Thingy whose prototype will be the old Thingy
-function Thingy:clone()
-	local self = self --[[@as Thingy]]
-	local new = {
-		__proto = self,
-		__props = setmetatable({}, {__index = self.__props}),
-		__uuid = UUID.v4(),
-		__type = self.__type,
-		__getters = setmetatable({}, {__index = self.__getters}),
-		__setters = setmetatable({}, {__index = self.__setters})
-	}
-	setmetatable(new, THINGY_META)
-	if type(new.constructor) == "function" then new.constructor(new) end
-	return new
-end
-
----Checks whether this Thiny inherits from that Thingy
----@param otherThingy Thingy
----@return boolean
-function Thingy:isInstanceOf(otherThingy)
-	local currentThingy = self
-	repeat
-		if currentThingy == otherThingy then return true end
-		currentThingy = currentThingy.__proto
-	until currentThingy == nil
-	return false
-end
-
----Gets the chain of prototypes from this Thingy to the root Thingy.
----Errors if there is a thingy loop.
----@param self Thingy
----@return Thingy[] thingyChain
-function Thingy.__getters.__protoChain(self)
-	---@type Set<Thingy>
-	local seenThingies = {
-		[self] = true
-	}
-	---@type Thingy[]
-	local thingyChain = {self}
-	while true do
-		local proto = table.last(thingyChain).__proto
-		if seenThingies[proto] then error("Critical Error: Circular Thingy Loop") end
-		if proto == nil then break end
-		table.insert(thingyChain, proto)
-		seenThingies[proto] = true
-	end
-	return thingyChain
-end
-
----Gets all properties of this thingy, including inherited ones
----@param self Thingy
----@return table
-function Thingy.__getters.__allProperties(self)
-	local protoChain = self.__protoChain
-	local props = {}
-	for _, thingy in ipairs(table.reverse(protoChain)) do
-		for k, v in pairs(thingy.__props) do
-			props[k] = v
-		end
-	end
-	return props
-end
 
 ---REMINDER TO SELF: ONLY ACTIVATES WHEN THE THINGY HAS IT AS NIL THANKS
 ---@param self Thingy
@@ -163,6 +97,74 @@ end
 function THINGY_META.__pairs(self)
 	if type(self.__pairs) == "function" then return self.__pairs(self) end
 	return pairs(self.__allProperties)
+end
+
+setmetatable(Thingy, THINGY_META)
+
+---Creates a clone of this Thingy.
+---@generic T:Thingy
+---@param self T
+---@return T new The new Thingy whose prototype will be the old Thingy
+function Thingy:clone()
+	local self = self --[[@as Thingy]]
+	local new = {
+		__proto = self,
+		__props = setmetatable({}, {__index = self.__props}),
+		__uuid = UUID.v4(),
+		__type = self.__type,
+		__getters = setmetatable({}, {__index = self.__getters}),
+		__setters = setmetatable({}, {__index = self.__setters})
+	}
+	setmetatable(new, THINGY_META)
+	if type(new.constructor) == "function" then new.constructor(new) end
+	return new
+end
+
+---Checks whether this Thiny inherits from that Thingy
+---@param otherThingy Thingy
+---@return boolean
+function Thingy:isInstanceOf(otherThingy)
+	local currentThingy = self
+	repeat
+		if currentThingy == otherThingy then return true end
+		currentThingy = currentThingy.__proto
+	until currentThingy == nil
+	return false
+end
+
+---Gets the chain of prototypes from this Thingy to the root Thingy.
+---Errors if there is a thingy loop.
+---@param self Thingy
+---@return Thingy[] thingyChain
+function Thingy.__getters.__protoChain(self)
+	---@type Set<Thingy>
+	local seenThingies = {
+		[self] = true
+	}
+	---@type Thingy[]
+	local thingyChain = {self}
+	while true do
+		local proto = table.last(thingyChain).__proto
+		if seenThingies[proto] then error("Critical Error: Circular Thingy Loop") end
+		if proto == nil then break end
+		table.insert(thingyChain, proto)
+		seenThingies[proto] = true
+	end
+	return thingyChain
+end
+
+---Gets all properties of this thingy, including inherited ones
+---@param self Thingy
+---@return table
+function Thingy.__getters.__allProperties(self)
+	local protoChain = self.__protoChain
+	local props = {}
+	for _, thingy in ipairs(table.reverse(protoChain)) do
+		for k, v in pairs(thingy.__props) do
+			props[k] = v
+		end
+	end
+	return props
 end
 
 return Thingy
