@@ -67,7 +67,12 @@ do -- Table lib changes
 		}, {
 			__index = function (T, k)
 				if T.__interior[k] then return T.__interior[k] end
-				if table[k] then return table[k] end
+				if table[k] then
+					return function (...)
+						local new = table[k](...)
+						return table.toMonad(new)
+					end
+				end
 			end,
 			__newindex = T
 		})
