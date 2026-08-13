@@ -33,6 +33,8 @@ local Thingy = {
 }
 local THINGY_META = {}
 Thingy.__name = "ProtoThingy"
+Thingy.__type = "Thingy"
+THINGY_META.__type = "Thingy"
 
 ---REMINDER TO SELF: ONLY ACTIVATES WHEN THE THINGY HAS IT AS NIL THANKS
 ---@param self Thingy
@@ -120,7 +122,7 @@ function Thingy:clone()
 		__getters = setmetatable({}, {__index = self.__getters}),
 		__setters = setmetatable({}, {__index = self.__setters})
 	}
-	setmetatable(new, THINGY_META)
+	setmetatable(new, table.clone(getmetatable(self)))
 	if type(new.constructor) == "function" then new:constructor(new) end
 	return new
 end
@@ -210,6 +212,13 @@ function Thingy.__getters.__allSettableProperties(self)
 		end
 	end
 	return props
+end
+
+---Type setter
+---@param self Thingy
+function Thingy.__setters.__type(self, ty)
+	getmetatable(self).__type = ty
+	rawset(self, "__type", ty)
 end
 
 return Thingy
