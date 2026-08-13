@@ -284,6 +284,8 @@ do	-- Globalization
 		new:freeze()
 		return new
 	end
+
+	Hierarch = require "HierarchConstructor"
 end
 
 LOG, errmsg = io.open("./logs/latest.log", "w")
