@@ -1,3 +1,4 @@
+quitBinds = {}
 local LOVERRHAND = require "errhand"
 
 lovr.filesystem.setRequirePath(
@@ -8,7 +9,7 @@ lovr.filesystem.setRequirePath(
 			"src/?.lua",
 			"src/object/?.lua"
 		}, ';'
-	)..';'..lovr.filesystem.getRequirePath()
+	) .. ';' .. lovr.filesystem.getRequirePath()
 )
 require "Globals"
 
@@ -25,15 +26,11 @@ function lovr.errhand(message)
 	end
 end
 
-function lovr.draw(pass)
-	BASIC.plane(pass)
-	
-	set2D(pass)
-	
-	return false
-end
-
-local function logExit()
+function lovr.quit()
+	for k, v in pairs(quitBinds) do
+		print(("Running quitbind %s"):format(k))
+		v()
+	end
 	if not LOG then return false end
 	print("Exiting.")
 	print("Log finalized.")
@@ -48,17 +45,5 @@ local function logExit()
 	return false
 end
 
---TODO: Figure out why ts ain't workin
-local originalErrhand = lovr.errhand
-function lovr.errhand(message)
-	if LOG then errLog(message) end
-	local success, result = pcall(function ()
-		return originalErrhand(message)
-	end)
-	if success then return result end
-	return -1
-end
-
-function lovr.quit()
-	return logExit()
-end
+-- Parsing arguments
+require "config"
