@@ -15,15 +15,14 @@ Hierarch.__type = "Hierarch"
 function Hierarch:constructor(new)
 	self.__proto:constructor(new)
 	---@diagnostic disable-next-line
-	new.Children = self.__proto.Children or {}
+	new.__children = {}
 end
 
 ---Gets (a copy of) the Hierarch's children list
+---@param self Hierarch
 ---@return [Hierarch] children
 function Hierarch.__getters:Children()
-	local list = {}
-	for child in pairs(self.__children) do table.insert(list, child) end
-	return list
+	return table.clone(self.__children)	---@diagnostic disable-line
 end
 
 ---Gets a list of the Hierarch's descendants.
@@ -42,16 +41,16 @@ function Hierarch.__getters:Descendants()
 	return desc
 end
 
-function Hierarch.__getters:getParent()
+function Hierarch.__getters:Parent()
 	return self.__parent
 end
 
 ---Sets the Parent of this Hierarch.
 ---@param self Hierarch
 ---@param p Hierarch
-function Hierarch.__setters:setParent(p)
+function Hierarch.__setters:Parent(p)
 	---@diagnostic disable
-	if self.Parent then self.Parent[self] = nil end
+	if self.Parent then table.remove(self.Parent.__children, table.find(self.Parent.__children, p)) end
 	self.__parent = p
 	table.insert(p.__children, self)
 	---@diagnostic enable

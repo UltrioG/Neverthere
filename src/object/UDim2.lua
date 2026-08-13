@@ -1,19 +1,18 @@
-local THINGY = require("Thingy")
+local DATATHINGY = require("Datathingy")
 
----@class UDim2: Thingy
+---@class UDim2: Datathingy
 ---@field xScale number
 ---@field yScale number
 ---@field xOffset integer
 ---@field yOffset integer
 ---@field private frozen boolean Whether the UDim2 is mutable
-local UDim2 = THINGY:clone()
+local UDim2 = DATATHINGY:clone()
 UDim2.xScale = 0
 UDim2.xOffset = 0
 UDim2.yScale = 0
 UDim2.yOffset = 0
 UDim2.__name = "ProtoUDim2"
 UDim2.__type = "UDim2"
-UDim2.frozen = false
 
 ---Human-readable version of UDim2
 ---@param self UDim2
@@ -25,25 +24,23 @@ end
 
 function UDim2.__setters:xScale(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	rawset(self, "xScale", v)
+	self.__props.xScale = v			---@diagnostic disable-line
 end
 function UDim2.__setters:xOffset(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	rawset(self, "xOffset", v)
+	self.__props.xOffset = v		---@diagnostic disable-line
 end
 function UDim2.__setters:yScale(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	rawset(self, "yScale", v)
+	self.__props.yScale = v			---@diagnostic disable-line
 end
 function UDim2.__setters:yOffset(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	rawset(self, "yOffset", v)
+	self.__props.yOffset = v		---@diagnostic disable-line
 end
 function UDim2.__setters:frozen()
 	error("Please use UDim2:freeze() to freeze the UDim2.")
 end
-function UDim2:freeze()
-	rawset(self, "frozen", true)
-end
+
 
 return UDim2

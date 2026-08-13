@@ -53,3 +53,5 @@ local PROGRAM_MODE_MAP = {
 	GAME = function ()	end,
 	GUIEDIT = function () require "GuiEditor" end
 }
+print("Running in mode "..CONFIG.PROGMODE)
+PROGRAM_MODE_MAP[CONFIG.PROGMODE]()

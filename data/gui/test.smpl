@@ -1,0 +1,52 @@
+<9b09a314-9989-4fd3-ab9e-800d0585c10e> Gui
+	Pivot = {
+		["x"] = 0.6,
+		["y"] = 0.6,
+		["z"] = 0
+	}
+	__name = "Root"
+	__children = {
+		[1] = <c001d80e-dadb-4707-8026-33d8723e0c13>
+	}
+	Visible = true
+	__position = <6c36e4f3-ad81-4713-a7ff-072db82f8ec4>
+	__size = <5ed7f337-5e5d-42e9-9f5e-2fd8100532d0>
+<eob>
+
+<c001d80e-dadb-4707-8026-33d8723e0c13> Box
+	__parent = <9b09a314-9989-4fd3-ab9e-800d0585c10e>
+	__children = {}
+	__name = "Box"
+	Visible = true
+	__position = <6c36e4f3-ad81-4713-a7ff-072db82f8ec4>
+	__size = <9e938802-973d-4afa-8834-4c506f065dd9>
+<eob>
+
+<6c36e4f3-ad81-4713-a7ff-072db82f8ec4> UDim2
+	xScale = 0.5
+	xOffset = 0
+	yScale = 0.5
+	yOffset = 0
+<eob>
+
+<5ed7f337-5e5d-42e9-9f5e-2fd8100532d0> UDim2
+	xScale = 0.8
+	xOffset = 0
+	yScale = 0.8
+	yOffset = 0
+<eob>
+
+<6c36e4f3-ad81-4713-a7ff-072db82f8ec4> UDim2
+	xScale = 0.5
+	xOffset = 0
+	yScale = 0.5
+	yOffset = 0
+<eob>
+
+<9e938802-973d-4afa-8834-4c506f065dd9> UDim2
+	xScale = 0
+	xOffset = 100
+	yScale = 0
+	yOffset = 100
+<eob>
+

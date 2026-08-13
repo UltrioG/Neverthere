@@ -22,6 +22,7 @@ local BYPASS_SETTERS = table.toSet({
 ---@field __allGettableProperties table
 ---@field __allSettableProperties table
 ---@field __allInherentProperties table
+---@field __allUniqueProperties table
 local Thingy = {
 	__proto = nil,
 	__props = {
@@ -131,11 +132,8 @@ end
 ---@param otherThingy Thingy
 ---@return boolean
 function Thingy:isInstanceOf(otherThingy)
-	local currentThingy = self
-	repeat
-		if currentThingy == otherThingy then return true end
-		currentThingy = currentThingy.__proto
-	until currentThingy == nil
+	local protoChain = table.reverse(self.__protoChain)
+	for _, v in ipairs(protoChain) do if rawequal(otherThingy, v) then return true end end
 	return false
 end
 
@@ -158,6 +156,13 @@ function Thingy.__getters.__protoChain(self)
 		seenThingies[proto] = true
 	end
 	return thingyChain
+end
+
+---Gets all properties of this thingy which are actually in its __props table and not inherited or gotten with getters.
+---@param self Thingy
+---@return table
+function Thingy.__getters.__allUniqueProperties(self)
+	return table.clone(self.__props) ---@diagnostic disable-line
 end
 
 ---Gets all properties of this thingy, including inherited ones, but excluding getters and setters

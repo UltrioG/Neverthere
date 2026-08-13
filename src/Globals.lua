@@ -53,6 +53,44 @@ do -- String lib changes
 	string.upperfirst = function(s)
 		return s:first():upper() .. s:rest()
 	end
+
+	local TO_SANITIZE = {
+		["\a"] = "\\a",
+		["\b"] = "\\b",
+		["\f"] = "\\f",
+		["\n"] = "\\n",
+		["\r"] = "\\r",
+		["\t"] = "\\t",
+		["\v"] = "\\v",
+		["\\"] = "\\\\",
+		["\'"] = "\\'",
+		["\""] = '\\"'
+	}
+	---Sanitizes a string so that it'd be equivalent to what one would type in source code.
+	---@param s string
+	---@return string
+	string.sanitize = function (s)
+		local out = s
+		for k, v in pairs(TO_SANITIZE) do
+			out = out:gsub(k, v)
+		end
+		return out
+	end
+	string.sanitise = string.sanitize
+
+
+	---Unsanitizes a string.
+	---@see string.sanitize
+	---@param s string
+	---@return string
+	string.unsanitize = function (s)
+		local out = s
+		for k, v in pairs(TO_SANITIZE) do
+			out = out:gsub(v, k)
+		end
+		return out
+	end
+	string.unsanitise = string.unsanitize
 end
 
 do -- Table lib changes
@@ -176,6 +214,14 @@ do -- Table lib changes
 		for k in pairs(T) do table.insert(new, k) end
 		return new
 	end
+
+	---Finds an element in a table
+	---@param haystack table
+	---@param needle any
+	---@return any? Index
+	table.find = function (haystack, needle)
+		for k, v in pairs(haystack) do if v == needle then return k end end
+	end
 end
 
 do -- Uncategorized Changes
@@ -262,13 +308,22 @@ do -- Uncategorized Changes
 	end
 
 	-- Fix weird bug with pairs not respecting metamethods
-	local raw_pairs = pairs
+	rawpairs = pairs
 	function pairs(T)
 		local meta = getmetatable(T)
 		if meta and meta.__pairs then
 			return meta.__pairs(T)
 		end
-		return raw_pairs(T)
+		return rawpairs(T)
+	end
+
+	rawtype = type
+	function type(T)
+		if rawtype(T) == "table" and T.__type ~= nil then
+			return T.__type
+		else
+			return rawtype(T)
+		end
 	end
 end
 

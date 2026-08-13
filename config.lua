@@ -1,19 +1,17 @@
 local PRETTY = require "Pretty"
-local BINSER = require "binser"
+local JSON = require "dkjson"
 
-local CONFILE = assert(io.open("./data/config.bsr", "rb"))
+local CONFILE = assert(io.open("./data/config.json", "r"))
 ---@class CONFIG
 ---@field PROGMODE programMode
-CONFIG = BINSER.deserialize(CONFILE:read("*a"))
+CONFIG = JSON.decode(CONFILE:read("*a")) or {}
 CONFIG.PROGMODE = CONFIG.PROGMODE or "GAME"
-
 CONFILE:close()
 
 function quitBinds.closeConfig()
-	local serialKiller = BINSER.serialize(CONFIG)
-	local CONFILE = assert(io.open("./data/config.bsr", "wb"))
+	local serialKiller = JSON.encode(CONFIG)--[[@as string]]
+	local CONFILE = assert(io.open("./data/config.json", "w"))
 	assert(CONFILE:write(serialKiller))
-	CONFILE:flush()
 	CONFILE:close()
 	print("Updated config file.")
 end

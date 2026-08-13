@@ -38,8 +38,10 @@ end
 
 ---Pretty prints a value.
 ---@param x any
-function PRETTY.print(x)
-	return print(PRETTY.parse(x))
+function PRETTY.print(...)
+	return print(unpack(table.map({...}, function (key, value)
+		return key, PRETTY.parse(value)
+	end)))
 end
 
 return PRETTY
