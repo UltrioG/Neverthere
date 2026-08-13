@@ -47,3 +47,9 @@ end
 
 -- Parsing arguments
 require "config"
+
+---@type {[programMode]: function}
+local PROGRAM_MODE_MAP = {
+	GAME = function ()	end,
+	GUIEDIT = function () require "GuiEditor" end
+}

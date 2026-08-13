@@ -10,6 +10,7 @@
 ---@alias dynamic<T> fun(): T
 ---@alias uuid string
 ---@alias pivot vector
+---@alias programMode "GUIEDIT" | "GAME"
 
 -- These are for clarity
 ---@alias queue<T> [T]
