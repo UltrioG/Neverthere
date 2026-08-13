@@ -15,6 +15,7 @@ Text.Content = "Isn't it about time you moved on?"
 Text.HorizontalAlignment = "center"
 Text.VerticalAlignment = "middle"
 Text.Scale = 1
+Text.Visible = true
 
 function Text:DrawSelf(pass)
 	if not self.Visible then return end

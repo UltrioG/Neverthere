@@ -20,7 +20,7 @@ for k in pairs(HIERARCH_TYPE) do HIERARCHLIST[k] = require(k) end
 ---@param hierarchType hierarchType	The type of the Hierarch you wish to create
 ---@return T Hierarch				The Hierarch
 function HIERARCH.new(hierarchType)
-	return assert(HIERARCHLIST[hierarchType], ("No Hierarch of type \"%s\" found!"):format(hierarchType)):Clone()
+	return assert(HIERARCHLIST[hierarchType], ("No Hierarch of type \"%s\" found!"):format(hierarchType)):clone()
 end
 
 return HIERARCH

@@ -44,6 +44,7 @@ function SMPL.encode(hierarch)
 		-- print(("Encoding %s"):format(tostring(current)))
 		output = output .. ("<%s> %s\n"):format(current.__uuid, current.__type)
 		for k, v in pairs(current.__allUniqueProperties) do
+			if encodeIndex == 1 and k == "__parent" then goto continue end
 			if k == "__uuid" then goto continue end
 			local encoded = valueEncode(v, encodeQueue, seenThings):gsub('\n', "\n\t")
 			output = output .. ("\t%s = %s\n"):format(k, encoded)
@@ -125,7 +126,7 @@ function SMPL.decode(s)
 				local k = k
 				if k:match("%b[]") then
 					k = k:sub(2,-2)
-					print(k)
+					-- print(k)
 					if k:match("^<[%w-]+>$") then	-- Is UUID
 						k = objects[k:match("^<([%w-]+)>$")]
 					elseif k == "true" then			-- Is true
@@ -151,7 +152,7 @@ function SMPL.decode(s)
 				elseif tonumber(v) then			-- Is number
 					table.last(tableQueue)[k] = tonumber(v)
 				elseif v:match('%b""') then		-- Is string
-					print(v:sub(2,-2))
+					-- print(v:sub(2,-2))
 					table.last(tableQueue)[k] = v:sub(2,-2):unsanitize()
 				elseif v == "{}" then			-- Is empty table
 					table.last(tableQueue)[k] = {}

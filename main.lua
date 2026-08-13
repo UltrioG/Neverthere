@@ -1,4 +1,12 @@
-quitBinds = {}
+LOVR_BINDS = {
+	quit = {},
+	draw = {},
+	conf = {},
+	keypressed = {},
+	textinput = {},
+	mousereleased = {},
+	keyreleased = {}
+}
 local LOVERRHAND = require "errhand"
 
 lovr.filesystem.setRequirePath(
@@ -26,11 +34,7 @@ function lovr.errhand(message)
 	end
 end
 
-function lovr.quit()
-	for k, v in pairs(quitBinds) do
-		print(("Running quitbind %s"):format(k))
-		v()
-	end
+LOVR_BINDS.quit[1] = function()
 	if not LOG then return false end
 	print("Exiting.")
 	print("Log finalized.")
@@ -43,6 +47,12 @@ function lovr.quit()
 	timedLog:close()
 	LOG:close()
 	return false
+end
+
+for bindName, bindList in pairs(LOVR_BINDS) do
+	lovr[bindName] = function (...)
+		for _, v in ipairs(bindList) do v(...) end
+	end
 end
 
 -- Parsing arguments

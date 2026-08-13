@@ -10,10 +10,7 @@
 
 local PRETTY = {}
 
----Prettifies a value.
----@param x any
----@return string
-function PRETTY.parse(x)
+local parseSingular = function (x)
 	local s = tostring(x)
 	if type(x) == "string" then return '"'..s:gsub("\n", "\\n")..'"' end
 	if type(x) == "nil" then return "nil" end
@@ -36,12 +33,17 @@ function PRETTY.parse(x)
 	return s
 end
 
+---Prettifies a value.
+---@vararg any
+---@return string ...
+function PRETTY.parse(...)
+	return unpack(table.map({...}, function(k,v) return k, parseSingular(v) end))
+end
+
 ---Pretty prints a value.
----@param x any
+---@vararg any
 function PRETTY.print(...)
-	return print(unpack(table.map({...}, function (key, value)
-		return key, PRETTY.parse(value)
-	end)))
+	return print(PRETTY.parse(...))
 end
 
 return PRETTY

@@ -173,4 +173,14 @@ function Gui:DrawSelf(pass)
 	pass:text(text, math.round(px - w/2), math.round(py - h/2), 1, 0.5, 0, 0, 0, 0, 0, "left", "bottom")
 end
 
+---Checks whether the given position is on the Gui.
+---@param x integer
+---@param y integer
+---@return boolean
+function Gui:IsPositionOnGui(x, y)
+	local px, py = self:GetPivotedPosition()
+	local w, h = self:GetAbsoluteSize()
+	return px - w/2 <= x and x <= px + w/2 and py - h/2 <= y and y <= py + h/2
+end
+
 return Gui

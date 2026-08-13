@@ -8,7 +8,7 @@ CONFIG = JSON.decode(CONFILE:read("*a")) or {}
 CONFIG.PROGMODE = CONFIG.PROGMODE or "GAME"
 CONFILE:close()
 
-function quitBinds.closeConfig()
+function LOVR_BINDS.quit.closeConfig()
 	local serialKiller = JSON.encode(CONFIG)--[[@as string]]
 	local CONFILE = assert(io.open("./data/config.json", "w"))
 	assert(CONFILE:write(serialKiller))

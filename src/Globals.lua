@@ -1,4 +1,5 @@
 ---@meta
+local pretty = require "Pretty"
 
 local uuid = require("uuid")
 uuid.set_rng(
@@ -277,8 +278,14 @@ do -- Uncategorized Changes
 	---Prints with the usual `print` function and also writes it to the log.
 	---@param ... any
 	function print(...)
-		log(...)
-		cprint(...)
+		local function lcp(...)
+			log(...)
+			cprint(...)
+		end
+		local packed = table.map({...}, function (key, value)
+			if rawtype(value) == "string" then return key, value else return key, pretty.parse(value) end
+		end)
+		lcp(unpack(packed))
 	end
 
 	---Writes an error to the log.

@@ -1,52 +1,39 @@
-<9b09a314-9989-4fd3-ab9e-800d0585c10e> Gui
-	Pivot = {
-		["x"] = 0.6,
-		["y"] = 0.6,
-		["z"] = 0
-	}
-	__name = "Root"
+<b32953e1-bf02-40bb-832e-6b32368eb709> Gui
+	__position = <f2e9bc5d-4958-4e7e-90c2-2e7089f517c2>
 	__children = {
-		[1] = <c001d80e-dadb-4707-8026-33d8723e0c13>
+		[1] = <130e988d-66c4-4746-8b0b-511f08dca012>
 	}
-	Visible = true
-	__position = <6c36e4f3-ad81-4713-a7ff-072db82f8ec4>
-	__size = <5ed7f337-5e5d-42e9-9f5e-2fd8100532d0>
+	__size = <58d7a303-fd72-4df5-b057-97593df51030>
+	__name = "ExportRoot"
 <eob>
 
-<c001d80e-dadb-4707-8026-33d8723e0c13> Box
-	__parent = <9b09a314-9989-4fd3-ab9e-800d0585c10e>
+<f2e9bc5d-4958-4e7e-90c2-2e7089f517c2> UDim2
+	xOffset = 0
+	yScale = 0.5
+	yOffset = 0
+	xScale = 0.5
+<eob>
+
+<130e988d-66c4-4746-8b0b-511f08dca012> Box
+	Visible = true
+	__parent = <b32953e1-bf02-40bb-832e-6b32368eb709>
 	__children = {}
-	__name = "Box"
-	Visible = true
-	__position = <6c36e4f3-ad81-4713-a7ff-072db82f8ec4>
-	__size = <9e938802-973d-4afa-8834-4c506f065dd9>
+	__position = <f2e9bc5d-4958-4e7e-90c2-2e7089f517c2>
+	__size = <0a2f9cbe-0c4c-4344-ba73-23ede8a33cc5>
+	__name = "hi"
 <eob>
 
-<6c36e4f3-ad81-4713-a7ff-072db82f8ec4> UDim2
-	xScale = 0.5
+<58d7a303-fd72-4df5-b057-97593df51030> UDim2
 	xOffset = 0
-	yScale = 0.5
+	yScale = 1
 	yOffset = 0
+	xScale = 1
 <eob>
 
-<5ed7f337-5e5d-42e9-9f5e-2fd8100532d0> UDim2
-	xScale = 0.8
-	xOffset = 0
-	yScale = 0.8
-	yOffset = 0
-<eob>
-
-<6c36e4f3-ad81-4713-a7ff-072db82f8ec4> UDim2
-	xScale = 0.5
-	xOffset = 0
-	yScale = 0.5
-	yOffset = 0
-<eob>
-
-<9e938802-973d-4afa-8834-4c506f065dd9> UDim2
-	xScale = 0
+<0a2f9cbe-0c4c-4344-ba73-23ede8a33cc5> UDim2
 	xOffset = 100
 	yScale = 0
 	yOffset = 100
+	xScale = 0
 <eob>
 

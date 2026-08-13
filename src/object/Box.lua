@@ -6,6 +6,7 @@ Box.__type = "Box"
 Box.Name = "ProtoBox"
 Box.Color = 0xf0f0f0
 Box.Transparency = 0
+Box.Visible = true
 
 function Box:DrawSelf(pass)
 	if not self.Visible then return end
