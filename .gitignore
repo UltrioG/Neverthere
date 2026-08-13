@@ -3,3 +3,4 @@ logs
 /lua
 /lua_modules
 /.luarocks
+data/config.bsr
