@@ -12,9 +12,9 @@ local Hierarch = THINGY:clone()
 Hierarch.__children = {}
 Hierarch.__type = "Hierarch"
 
+---@param new Hierarch
 function Hierarch:constructor(new)
 	self.__proto:constructor(new)
-	---@diagnostic disable-next-line
 	new.__children = {}
 end
 
@@ -22,7 +22,7 @@ end
 ---@param self Hierarch
 ---@return [Hierarch] children
 function Hierarch.__getters:Children()
-	return table.clone(self.__children)	---@diagnostic disable-line
+	return table.clone(self.__children)
 end
 
 ---Gets a list of the Hierarch's descendants.
@@ -49,11 +49,9 @@ end
 ---@param self Hierarch
 ---@param p Hierarch
 function Hierarch.__setters:Parent(p)
-	---@diagnostic disable
 	if self.Parent then table.remove(self.Parent.__children, table.find(self.Parent.__children, p)) end
 	self.__parent = p
 	table.insert(p.__children, self)
-	---@diagnostic enable
 end
 
 ---Creates a new Hierarch with the same properties as this one.

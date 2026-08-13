@@ -7,7 +7,8 @@
 	"Lua.workspace.checkThirdParty": false,
 	"Lua.completion.autoRequire": false,
 	"Lua.diagnostics.disable": [
-		"lowercase-global"
+		"lowercase-global",
+		"invisible"
 	],
 	"Lua.diagnostics.globals": [
 		"lovr"

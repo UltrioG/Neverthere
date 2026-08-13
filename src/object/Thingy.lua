@@ -54,7 +54,6 @@ end
 ---@param v any
 function THINGY_META.__newindex(self, k, v)
 	if type(self.__setters[k]) == "function" and not BYPASS_SETTERS[k] then self.__setters[k](self, v) return end
-	---@diagnostic disable-next-line
 	self.__props[k] = v
 end
 
@@ -162,7 +161,7 @@ end
 ---@param self Thingy
 ---@return table
 function Thingy.__getters.__allUniqueProperties(self)
-	return table.clone(self.__props) ---@diagnostic disable-line
+	return table.clone(self.__props)
 end
 
 ---Gets all properties of this thingy, including inherited ones, but excluding getters and setters
@@ -188,7 +187,6 @@ function Thingy.__getters.__allGettableProperties(self)
 	for _, thingy in ipairs(table.reverse(protoChain)) do
 		---@type Thingy
 		local thingy = thingy
-		---@diagnostic disable-next-line
 		for k, v in pairs(thingy.__props) do
 			props[k] = v
 		end
@@ -208,7 +206,6 @@ function Thingy.__getters.__allSettableProperties(self)
 	for _, thingy in ipairs(table.reverse(protoChain)) do
 		---@type Thingy
 		local thingy = thingy
-		---@diagnostic disable-next-line
 		for k, v in pairs(thingy.__props) do
 			props[k] = v
 		end

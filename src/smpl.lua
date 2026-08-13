@@ -62,7 +62,6 @@ end
 local function createThing(thingy)
 	if thingy == "UDim2" then
 		local udim2 = UDim2.new()
-		---@diagnostic disable-next-line
 		udim2.__props.frozen = false	-- Shh... don't tell anyone I'm doing this :)
 		return udim2, true
 	else

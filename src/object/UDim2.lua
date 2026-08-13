@@ -21,26 +21,26 @@ function UDim2:__tostring()
 	return ("{%0.4f%%%i, %0.4f%%%i}"):format(self.xScale or 0, self.xOffset or 0, self.yScale or 0, self.yOffset or 0)
 end
 
-
+---@diagnostic disable
 function UDim2.__setters:xScale(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	self.__props.xScale = v			---@diagnostic disable-line
+	self.__props.xScale = v
 end
 function UDim2.__setters:xOffset(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	self.__props.xOffset = v		---@diagnostic disable-line
+	self.__props.xOffset = v
 end
 function UDim2.__setters:yScale(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	self.__props.yScale = v			---@diagnostic disable-line
+	self.__props.yScale = v
 end
 function UDim2.__setters:yOffset(v)
 	if UDim2.frozen then error("UDim2 is immutable!") end
-	self.__props.yOffset = v		---@diagnostic disable-line
+	self.__props.yOffset = v
 end
 function UDim2.__setters:frozen()
 	error("Please use UDim2:freeze() to freeze the UDim2.")
 end
-
+---@diagnostic enable
 
 return UDim2

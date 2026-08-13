@@ -19,12 +19,11 @@ Gui.__size = UDim2.new(0,100,0,100)
 Gui.Pivot = vector(0.5, 0.5)
 Gui:constructor(Gui)
 
+---@param new Gui
 function Gui:constructor(new)
-	---@diagnostic disable
 	self.__proto:constructor(new)
 	new.Position = self.Position
 	new.Size = self.Size
-	---@diagnostic enable
 end
 
 ---Get the size, in pixels, of this Gui.
@@ -111,28 +110,28 @@ end
 function Gui.__setters:Position(pos)
 	---@type UDim2
 	local newPos = pos
-	self.__position = newPos	---@diagnostic disable-line
+	self.__position = newPos
 end
 
 ---Get the position, in UDim2, of this Gui
 ---@param self Gui
 ---@return UDim2 Position
 function Gui.__getters:Position()
-	return self.__position	---@diagnostic disable-line
+	return self.__position
 end
 
 ---Sets the size, in UDim2, of this Gui
 ---@param self Gui
 ---@param size UDim2
 function Gui.__setters:Size(size)
-	self.__size = size	---@diagnostic disable-line
+	self.__size = size
 end
 
 ---Gets the size, in UDim2, of this Gui
 ---@param self Gui
 ---@return UDim2 Size
 function Gui.__getters:Size()
-	return self.__size	---@diagnostic disable-line
+	return self.__size
 end
 
 ---Draws this Gui, and all its children, to this pass.
